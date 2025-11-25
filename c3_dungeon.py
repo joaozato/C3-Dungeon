@@ -36,6 +36,7 @@ def fase_jogo(win):
         teste_texto_atual=teste_texto_atual+letra
         Texto.setText(teste_texto_atual)
         time.sleep(0.05)
+        
     
 
 
