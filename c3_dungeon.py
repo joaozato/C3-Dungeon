@@ -21,7 +21,7 @@ def menu (win):
             return "fase1"
         
 def fase_jogo(win):
-    background2=Image(Point(540,400),"imgs/floresta.png")
+    background2=Image(Point(540,400),"imgs/floresta2.png")
     background2.draw(win)
     ponto_central = Point(140,675)
     #retratoo
@@ -51,10 +51,17 @@ def fase_jogo(win):
     #---textooo---
     centrox_texto = (x1_dialogo + x2_dialogo) / 2
     centroy_texto = (y1 + y2) / 2
+    caixa_dialogo.draw(win)
+
+    #---textooo---
+
+    centrox_texto = (x1_dialogo + x2_dialogo) / 2
+    centroy_texto = (y1 + y2) / 2
 
     teste='Você foi o escolhido para defender o C3\n Em um momento de fragilidade, quando os exames \n estão a beira de acontecer \n as criaturas da infernais querem as almas dos estudantes \n só você pode impedir isso Estudante!'
     teste_texto_atual=''
-    Texto=Text(Point(500,650),'')
+    Texto=Text(Point(centrox_texto,centroy_texto),'')
+    Texto.setTextColor("white")
     Texto.draw(win)
     for letra in teste: #nesse loop inicia a caixa de texto de forma que as letras sejam desenhadas devagar.
         teste_texto_atual=teste_texto_atual+letra
@@ -101,6 +108,9 @@ def fase_jogo2(win):
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
+    if telas == "fase1":
+        fase_jogo(win)
+    '''
     player = {
         "nome": 'nome_player',
         "vida_max": 100,
@@ -119,6 +129,7 @@ def main ():
         "dano_especial":20,
 
     }
+    
 
     if telas == "fase1":
         telas=fase_jogo(win)
@@ -126,5 +137,5 @@ def main ():
         fase_jogo2(win)
     win.getMouse()
     win.close()
+    ''' 
 main()
-
