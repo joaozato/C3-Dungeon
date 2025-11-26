@@ -77,7 +77,6 @@ def fase_jogo2(win):
     personagem.draw(win)
     player_x=540
     player_y=400
-    sprites_direita=[]
     #sprite_atual.draw(win)
     personagem_esq=Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
     cont =1
@@ -86,12 +85,12 @@ def fase_jogo2(win):
         cont+=1
         tecla=win.checkKey()
         if tecla == 'w':
+            personagem.undraw()
             for i in listasprite_costas:
                 p_costas = Image(Point(player_x,player_y), listasprite_costas[0])
-            personagem.move(0,-5)
-            p_costas.draw(win) 
-            personagem.undraw()
-            player_y=-5
+                p_costas.move(0,-5)
+                player_y=-5
+                p_costas.draw(win)
         elif tecla == 'a':
             personagem.move(-5,0)
             player_x=-5
