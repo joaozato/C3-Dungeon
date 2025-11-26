@@ -1,5 +1,9 @@
 from graphics import *
 import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
+
+#lista sprites
+#listasprite_costas = [r'C:/Users/Rafaela/Desktop/C3_Dungeon/C3-Dungeon/imgs/sprite_personagem/sprite1_costas.png',r'C:/Users/Rafaela/Desktop/C3_Dungeon/C3-Dungeon/imgs/sprite_personagem/sprite2_costas.png']
+
 def menu (win):
     background1= Image(Point(540,400),"imgs/c3.png")    #imagem background do menu
     background1.draw(win)           
@@ -52,11 +56,6 @@ def fase_jogo(win):
     centroy_texto = (y1 + y2) / 2
     caixa_dialogo.draw(win)
 
-    #---textooo---
-
-    centrox_texto = (x1_dialogo + x2_dialogo) / 2
-    centroy_texto = (y1 + y2) / 2
-
     teste='Você foi o escolhido para defender o C3\n Em um momento de fragilidade, quando os exames \n estão a beira de acontecer \n as criaturas da infernais querem as almas dos estudantes \n só você pode impedir isso Estudante!'
     teste_texto_atual=''
     Texto=Text(Point(centrox_texto,centroy_texto),'')
@@ -66,7 +65,8 @@ def fase_jogo(win):
         teste_texto_atual=teste_texto_atual+letra
         Texto.setText(teste_texto_atual)
         Texto.setTextColor("white")
-        time.sleep(0.05)
+        #time.sleep(0.05)
+    
     win.getMouse()
     return "fase2"
 
@@ -81,11 +81,18 @@ def fase_jogo2(win):
     #sprite_atual.draw(win)
     personagem_esq=Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
     cont =1
+    i = 0
     while cont > 0:
         cont+=1
         tecla=win.checkKey()
         if tecla == 'w':
             personagem.move(0,-5)
+            personagem.undraw()
+            ''' mudanças rafa
+            for i in listasprite_costas:
+                p_costas = Image(Point(player_x,player_y), listasprite_costas)
+            p_costas.draw(win) 
+            ''' 
             player_y=-5
         elif tecla == 'a':
             personagem.move(-5,0)
@@ -96,7 +103,6 @@ def fase_jogo2(win):
         elif tecla == 'd':
             personagem.move(5,0)
             player_x=+5
-
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
