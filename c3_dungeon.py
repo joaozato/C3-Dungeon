@@ -49,6 +49,11 @@ def fase_jogo(win):
     caixa_dialogo.draw(win)
 
     #---textooo---
+    centrox_texto = (x1_dialogo + x2_dialogo) / 2
+    centroy_texto = (y1 + y2) / 2
+    caixa_dialogo.draw(win)
+
+    #---textooo---
 
     centrox_texto = (x1_dialogo + x2_dialogo) / 2
     centroy_texto = (y1 + y2) / 2
@@ -61,7 +66,43 @@ def fase_jogo(win):
     for letra in teste: #nesse loop inicia a caixa de texto de forma que as letras sejam desenhadas devagar.
         teste_texto_atual=teste_texto_atual+letra
         Texto.setText(teste_texto_atual)
+        Texto.setTextColor("white")
         time.sleep(0.05)
+    win.getMouse()
+    return "fase2"
+
+def fase_jogo2(win):
+    background_c3=Image(Point(540,400),"imgs/imagemc3inicio.png")
+    background_c3.draw(win)
+    personagem=Image(Point(540,400),"imgs/personagemof.png")
+    personagem.draw(win)
+    player_x=540
+    player_y=400
+    sprites_direita=[]
+    for i in range(4):
+        img=Image(Point(player_x,player_y),f"imgs/personagem_direita/image{i}.png")
+        sprites_direita.append(img)
+    sprite_atual=sprites_direita[0]
+    #sprite_atual.draw(win)
+    personagem_esq=Image(Point(player_x,player_y),'imgs/personagemesq.png')
+    cont =1
+    while cont > 0:
+        cont+=1
+        tecla=win.checkKey()
+        if tecla == 'w':
+            personagem.move(0,-5)
+            player_y=-5
+        elif tecla == 'a':
+            personagem.move(-5,0)
+            player_x=-5
+            personagem.undraw()
+            personagem_esq.draw(win)
+        elif tecla == 's':
+            personagem.move(0,5)
+            player_y=+5
+        elif tecla == 'd':
+            personagem.move(5,0)
+            player_x=+5
 
 
 def main ():
@@ -91,9 +132,9 @@ def main ():
     
 
     if telas == "fase1":
-        fase_jogo(win,player,inimigo_1)
+        telas=fase_jogo(win)
     if telas == "fase2":
-        fase_jogo2(win,player,inimigo_1,Prisco)
+        fase_jogo2(win)
     win.getMouse()
     win.close()
     ''' 
