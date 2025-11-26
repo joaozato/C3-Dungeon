@@ -2,7 +2,7 @@ from graphics import *
 import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
 
 #lista sprites
-#listasprite_costas = [r'C:/Users/Rafaela/Desktop/C3_Dungeon/C3-Dungeon/imgs/sprite_personagem/sprite1_costas.png',r'C:/Users/Rafaela/Desktop/C3_Dungeon/C3-Dungeon/imgs/sprite_personagem/sprite2_costas.png']
+listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png']
 
 def menu (win):
     background1= Image(Point(540,400),"imgs/c3.png")    #imagem background do menu
@@ -86,13 +86,11 @@ def fase_jogo2(win):
         cont+=1
         tecla=win.checkKey()
         if tecla == 'w':
-            personagem.move(0,-5)
-            personagem.undraw()
-            ''' mudanças rafa
             for i in listasprite_costas:
-                p_costas = Image(Point(player_x,player_y), listasprite_costas)
+                p_costas = Image(Point(player_x,player_y), listasprite_costas[0])
+            personagem.move(0,-5)
             p_costas.draw(win) 
-            ''' 
+            personagem.undraw()
             player_y=-5
         elif tecla == 'a':
             personagem.move(-5,0)
