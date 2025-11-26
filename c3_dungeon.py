@@ -46,7 +46,6 @@ def fase_jogo(win):
     foto_retrato.draw(win)
     caixa_dialogo=Rectangle(Point(x1_dialogo,y1),Point(x2_dialogo,y2))   
     caixa_dialogo.setFill("black")
-    caixa_dialogo.draw(win)
 
     #---textooo---
     centrox_texto = (x1_dialogo + x2_dialogo) / 2
@@ -74,17 +73,13 @@ def fase_jogo(win):
 def fase_jogo2(win):
     background_c3=Image(Point(540,400),"imgs/imagemc3inicio.png")
     background_c3.draw(win)
-    personagem=Image(Point(540,400),"imgs/personagemof.png")
+    personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
     personagem.draw(win)
     player_x=540
     player_y=400
     sprites_direita=[]
-    for i in range(4):
-        img=Image(Point(player_x,player_y),f"imgs/personagem_direita/image{i}.png")
-        sprites_direita.append(img)
-    sprite_atual=sprites_direita[0]
     #sprite_atual.draw(win)
-    personagem_esq=Image(Point(player_x,player_y),'imgs/personagemesq.png')
+    personagem_esq=Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
     cont =1
     while cont > 0:
         cont+=1
@@ -95,8 +90,6 @@ def fase_jogo2(win):
         elif tecla == 'a':
             personagem.move(-5,0)
             player_x=-5
-            personagem.undraw()
-            personagem_esq.draw(win)
         elif tecla == 's':
             personagem.move(0,5)
             player_y=+5
@@ -110,7 +103,6 @@ def main ():
     telas=menu(win)
     if telas == "fase1":
         fase_jogo(win)
-    '''
     player = {
         "nome": 'nome_player',
         "vida_max": 100,
@@ -129,7 +121,6 @@ def main ():
         "dano_especial":20,
 
     }
-    
 
     if telas == "fase1":
         telas=fase_jogo(win)
@@ -137,5 +128,4 @@ def main ():
         fase_jogo2(win)
     win.getMouse()
     win.close()
-    ''' 
 main()
