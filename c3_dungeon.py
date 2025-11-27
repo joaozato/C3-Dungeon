@@ -1,6 +1,6 @@
 from graphics import *
 import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
-
+import random
 #lista sprites
 listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png']
 
@@ -100,6 +100,34 @@ def fase_jogo2(win):
         elif tecla == 'd':
             personagem.move(5,0)
             player_x=+5
+        if tecla == "f":
+            return 'fase3'
+
+def fase_jogo3(win,player,inimigo_1):
+    background3=Image(Point(540,400),"imgs/floresta.png")
+    background3.draw(win)
+    personagem_batalha=Image(Point(150,500),"imgs/sprite_personagem/sprite2.png")
+    personagem_batalha.draw(win)
+    prisco=Image(Point(700,500),"imgs/PRISCO.png")
+    prisco.draw(win)
+    caixa_dialogo2=Rectangle(Point(350,700),(Point(700,750)))
+    caixa_dialogo2.setFill('black')
+    caixa_dialogo2.draw(win)
+    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!")
+    texto_batalha.setFill("white")
+    texto_batalha.draw(win)
+    win.getMouse()
+    texto_batalha.undraw()
+    caixa_dialogo2.undraw()
+    while player["vida_atual"]>0 or inimigo_1["vida_atual"]>0:
+        tecla=win.getKey()
+        turno_player=True
+
+        if tecla == '1' and turno_player== True:
+            inimigo_1['vida_atual'] = inimigo_1['vida_atual'] - player['dano']
+            print(inimigo_1['vida_atual'])
+        if inimigo_1["vida_atual"] <0:
+            break            
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
@@ -128,7 +156,9 @@ def main ():
     if telas == "fase1":
         telas=fase_jogo(win)
     if telas == "fase2":
-        fase_jogo2(win)
+        telas = fase_jogo2(win)
+    if telas == "fase3":
+        fase_jogo3(win,player,inimigo_1)
     win.getMouse()
-    win.close()
+    
 main()
