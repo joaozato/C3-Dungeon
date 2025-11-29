@@ -1,6 +1,6 @@
 from graphics import *
 import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
-import random
+import random as rd
 #lista sprites
 listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png']
 
@@ -119,14 +119,30 @@ def fase_jogo3(win,player,inimigo_1):
     win.getMouse()
     texto_batalha.undraw()
     caixa_dialogo2.undraw()
-    while player["vida_atual"]>0 or inimigo_1["vida_atual"]>0:
+    coracao=Image(Point(150,100),'imgs/coracao_aliado.png')
+    HP=Text(Point(905,100),f'{inimigo_1['vida']}')
+    HP.setFill("White")
+    HP.setSize(20)
+    coracao_inimigo=Image(Point(900,100),"imgs/coracao_inimigo.png")
+    coracao.draw(win)
+    coracao_inimigo.draw(win)
+    HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+    HP_personagem.setFill("White")
+    HP_personagem.setSize(20)
+    HP_personagem.draw(win)
+    HP.draw(win)
+    while player["vida_atual"]>0 or inimigo_1["vida"]>0:
         tecla=win.getKey()
         turno_player=True
-
         if tecla == '1' and turno_player== True:
-            inimigo_1['vida_atual'] = inimigo_1['vida_atual'] - player['dano']
-            print(inimigo_1['vida_atual'])
-        if inimigo_1["vida_atual"] <0:
+            inimigo_1['vida'] = inimigo_1['vida'] - player['dano']
+            print(inimigo_1['vida'])
+            HP.undraw()
+            HP=Text(Point(905,100),f'{inimigo_1['vida']}')
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)
+        if inimigo_1["vida"] <=0:
             break            
 
 def main ():
