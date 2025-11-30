@@ -1,6 +1,6 @@
 from graphics import *
 import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
-
+import random as rd
 #lista sprites
 listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png','imgs/sprite_personagem/sprite3_costas.png']
 listasprite_frente = ['imgs/sprite_personagem/sprite1_frente.png','imgs/sprite_personagem/sprite2_frente.png','imgs/sprite_personagem/sprite3_frente.png']
@@ -89,38 +89,22 @@ def fase_jogo2(win):
     lista = listasprite_frente
     while andando:
         tecla=win.checkKey()
-        if tecla == 'w' or tecla == 's' or tecla == 'd' or tecla == 'a':
-            sprite_atual.undraw()
-
-            if tecla != ultima_tecla:
-                cont = 0
-                ultima_tecla = tecla
-            if tecla == 'w':
-                player_y = player_y - 5
-                lista = listasprite_costas
-                #sprite_novo = listasprite_costas[cont]
-            elif tecla == 's':
-                player_y = player_y + 5
-                lista = listasprite_frente
-                #sprite_novo = listasprite_frente[cont]
-            elif tecla == 'a':
-                player_x = player_x - 5
-                lista = listasprite_esq
-            elif tecla == 'd':
-                player_x = player_x + 5
-                lista = listasprite_dir
-
-            #caralho NAO PARA DE DAR INDEX OUT OF RANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-
-            if cont >= len(lista):
-                cont = 0
-
-            sprite_novo = lista[cont]
-            sprite_atual =Image(Point(player_x,player_y),sprite_novo)
-            sprite_atual.draw(win)
-            cont += 1
-        time.sleep(0.10)
-
+        if tecla == 'w':
+            personagem.undraw()
+            for i in listasprite_costas:
+                p_costas = Image(Point(player_x,player_y), listasprite_costas[0])
+                p_costas.move(0,-5)
+                player_y=-5
+                p_costas.draw(win)
+        elif tecla == 'a':
+            personagem.move(-5,0)
+            player_x=-5
+        elif tecla == 's':
+            personagem.move(0,5)
+            player_y=+5
+        elif tecla == 'd':
+            personagem.move(5,0)
+            player_x=+5
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
@@ -149,7 +133,9 @@ def main ():
     if telas == "fase1":
         telas=fase_jogo(win)
     if telas == "fase2":
-        fase_jogo2(win)
+        telas = fase_jogo2(win)
+    if telas == "fase3":
+        fase_jogo3(win,player,inimigo_1)
     win.getMouse()
-    win.close()
+    
 main()
