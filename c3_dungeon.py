@@ -222,9 +222,9 @@ def main ():
         "vida_max": 200,
         "dano_normal":10,
         "dano_especial":20,
-
     }
 
+    #ATENÇAO PRA NAO CHAMAR DUAS VZS
     if telas == "fase1":
         telas=fase_jogo(win)
     if telas == "fase2":
