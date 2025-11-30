@@ -89,22 +89,80 @@ def fase_jogo2(win):
     lista = listasprite_frente
     while andando:
         tecla=win.checkKey()
-        if tecla == 'w':
-            personagem.undraw()
-            for i in listasprite_costas:
-                p_costas = Image(Point(player_x,player_y), listasprite_costas[0])
-                p_costas.move(0,-5)
-                player_y=-5
-                p_costas.draw(win)
-        elif tecla == 'a':
-            personagem.move(-5,0)
-            player_x=-5
-        elif tecla == 's':
-            personagem.move(0,5)
-            player_y=+5
-        elif tecla == 'd':
-            personagem.move(5,0)
-            player_x=+5
+        if tecla == 'w' or tecla == 's' or tecla == 'd' or tecla == 'a':
+            sprite_atual.undraw()
+
+            if tecla != ultima_tecla:
+                cont = 0
+                ultima_tecla = tecla
+            if tecla == 'w':
+                player_y = player_y - 5
+                lista = listasprite_costas
+                #sprite_novo = listasprite_costas[cont]
+            elif tecla == 's':
+                player_y = player_y + 5
+                lista = listasprite_frente
+                #sprite_novo = listasprite_frente[cont]
+            elif tecla == 'a':
+                player_x = player_x - 5
+                lista = listasprite_esq
+            elif tecla == 'd':
+                player_x = player_x + 5
+                lista = listasprite_dir
+
+            #caralho NAO PARA DE DAR INDEX OUT OF RANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+            if cont >= len(lista):
+                cont = 0
+
+            sprite_novo = lista[cont]
+            sprite_atual =Image(Point(player_x,player_y),sprite_novo)
+            sprite_atual.draw(win)
+            cont += 1
+        time.sleep(0.10)
+
+def fase_jogo3(win,player,inimigo_1):
+    background3=Image(Point(540,400),"imgs/floresta.png")
+    background3.draw(win)
+    personagem_batalha=Image(Point(150,500),"imgs/sprite_personagem/sprite2.png")
+    personagem_batalha.draw(win)
+    prisco=Image(Point(700,500),"imgs/PRISCO.png")
+    prisco.draw(win)
+    caixa_dialogo2=Rectangle(Point(350,700),(Point(700,750)))
+    caixa_dialogo2.setFill('black')
+    caixa_dialogo2.draw(win)
+    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!")
+    texto_batalha.setFill("white")
+    texto_batalha.draw(win)
+    win.getMouse()
+    texto_batalha.undraw()
+    caixa_dialogo2.undraw()
+    coracao=Image(Point(150,100),'imgs/coracao_aliado.png')
+    HP=Text(Point(905,100),f'{inimigo_1['vida']}')
+    HP.setFill("White")
+    HP.setSize(20)
+    coracao_inimigo=Image(Point(900,100),"imgs/coracao_inimigo.png")
+    coracao.draw(win)
+    coracao_inimigo.draw(win)
+    HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+    HP_personagem.setFill("White")
+    HP_personagem.setSize(20)
+    HP_personagem.draw(win)
+    HP.draw(win)
+    while player["vida_atual"]>0 or inimigo_1["vida"]>0:
+        tecla=win.getKey()
+        turno_player=True
+        if tecla == '1' and turno_player== True:
+            inimigo_1['vida'] = inimigo_1['vida'] - player['dano']
+            print(inimigo_1['vida'])
+            HP.undraw()
+            HP=Text(Point(905,100),f'{inimigo_1['vida']}')
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)
+        if inimigo_1["vida"] <=0:
+            break            
+>>>>>>> b0c36a63450c964299fe31320c3524757f0f40eb
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
