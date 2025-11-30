@@ -2,7 +2,10 @@ from graphics import *
 import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
 
 #lista sprites
-listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png']
+listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png','imgs/sprite_personagem/sprite3_costas.png']
+listasprite_frente = ['imgs/sprite_personagem/sprite1_frente.png','imgs/sprite_personagem/sprite2_frente.png','imgs/sprite_personagem/sprite3_frente.png']
+listasprite_esq = ['imgs/sprite_personagem/sprite1_esquerda.png','imgs/sprite_personagem/sprite2_esquerda.png','imgs/sprite_personagem/sprite3_esquerda.png','imgs/sprite_personagem/sprite4_esquerda.png','imgs/sprite_personagem/sprite5_esquerda.png']
+listasprite_dir = ['imgs/sprite_personagem/sprite1.png','imgs/sprite_personagem/sprite2.png','imgs/sprite_personagem/sprite3.png','imgs/sprite_personagem/sprite4.png','imgs/sprite_personagem/sprite5.png']
 
 def menu (win):
     background1= Image(Point(540,400),"imgs/c3.png")    #imagem background do menu
@@ -73,33 +76,51 @@ def fase_jogo(win):
 def fase_jogo2(win):
     background_c3=Image(Point(540,400),"imgs/imagemc3inicio.png")
     background_c3.draw(win)
-    personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
-    personagem.draw(win)
-    player_x=540
-    player_y=400
+    #personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
+    #personagem.draw(win)
+    player_x= 540
+    player_y= 400
     #sprite_atual.draw(win)
-    personagem_esq=Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
-    cont =1
-    i = 0
-    while cont > 0:
-        cont+=1
+    sprite_atual =Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
+    sprite_atual.draw(win)
+    ultima_tecla = ''
+    andando = True
+    cont = 0
+    lista = listasprite_frente
+    while andando:
         tecla=win.checkKey()
-        if tecla == 'w':
-            personagem.undraw()
-            for i in listasprite_costas:
-                p_costas = Image(Point(player_x,player_y), listasprite_costas[0])
-                p_costas.move(0,-5)
-                player_y=-5
-                p_costas.draw(win)
-        elif tecla == 'a':
-            personagem.move(-5,0)
-            player_x=-5
-        elif tecla == 's':
-            personagem.move(0,5)
-            player_y=+5
-        elif tecla == 'd':
-            personagem.move(5,0)
-            player_x=+5
+        if tecla == 'w' or tecla == 's' or tecla == 'd' or tecla == 'a':
+            sprite_atual.undraw()
+
+            if tecla != ultima_tecla:
+                cont = 0
+                ultima_tecla = tecla
+            if tecla == 'w':
+                player_y = player_y - 5
+                lista = listasprite_costas
+                #sprite_novo = listasprite_costas[cont]
+            elif tecla == 's':
+                player_y = player_y + 5
+                lista = listasprite_frente
+                #sprite_novo = listasprite_frente[cont]
+            elif tecla == 'a':
+                player_x = player_x - 5
+                lista = listasprite_esq
+            elif tecla == 'd':
+                player_x = player_x + 5
+                lista = listasprite_dir
+
+            #caralho NAO PARA DE DAR INDEX OUT OF RANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+            if cont >= len(lista):
+                cont = 0
+
+            sprite_novo = lista[cont]
+            sprite_atual =Image(Point(player_x,player_y),sprite_novo)
+            sprite_atual.draw(win)
+            cont += 1
+        time.sleep(0.10)
+
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
