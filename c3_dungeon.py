@@ -27,7 +27,7 @@ def menu (win):
             font.undraw()
             return "fase1"
         
-def inventario (win):
+def inventario (win): #funçao apenas da janela, criar outra funçao pra armazenar os itens
     win_inv = GraphWin("Inventário",400,400)
     win_inv.setBackground("grey")
     aviso = Text(Point(200, 380), "Clique para fechar")
@@ -92,11 +92,15 @@ def fase_jogo(win):
     Texto=Text(Point(centrox_texto,centroy_texto),'')
     Texto.setTextColor("white")
     Texto.draw(win)
+
     for letra in teste: #nesse loop inicia a caixa de texto de forma que as letras sejam desenhadas devagar.
+        if win.checkMouse(): #se houve click enqt ta mosttando o texto
+            Texto.setText(teste) #se sim mostra o texto completo e para d mostra 
+            break 
         teste_texto_atual=teste_texto_atual+letra
         Texto.setText(teste_texto_atual)
         Texto.setTextColor("white")
-        #time.sleep(0.05)
+        time.sleep(0.05)
 
     while True:
         click = win.getMouse()
@@ -202,8 +206,6 @@ def fase_jogo3(win,player,inimigo_1):
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
-    if telas == "fase1":
-        fase_jogo(win)
     player = {
         "nome": 'nome_player',
         "vida_max": 100,
