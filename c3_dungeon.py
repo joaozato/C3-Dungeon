@@ -27,11 +27,21 @@ def menu (win):
             font.undraw()
             return "fase1"
         
+def inventario (win):
+    win_inv = GraphWin("Inventário",400,400)
+    win_inv.setBackground("grey")
+    aviso = Text(Point(200, 380), "Clique para fechar")
+    aviso.draw(win_inv)
+    win_inv.getMouse()
+    win_inv.close()
+
 def fase_jogo(win):
+
     background2=Image(Point(540,400),"imgs/floresta2.png")
     background2.draw(win)
     ponto_central = Point(140,675)
     #retratoo
+
     foto_retrato = Image(ponto_central, "imgs/principal_menor.png")
     largura_retrato = foto_retrato.getWidth()
     altura_retrato = foto_retrato.getHeight()
@@ -46,6 +56,24 @@ def fase_jogo(win):
     x1_dialogo = x2 + 20 #x2 onde o retrato termina + 20px de espaço
     x2_dialogo = 1030 #x fixo
 
+    #inventariobotao
+
+    altura = 40
+    margem = 10
+
+    inv_y2 = y1 - margem
+    inv_y1 = inv_y2 - altura
+
+    
+    inventario_button = Rectangle(Point(x1,inv_y1),Point(x2,inv_y2))
+    inventario_button.setFill("orange")
+    inventario_button.draw(win)
+    centrox_inv = (x1 + x2) / 2 #msm coisa
+    centroy_inv = (inv_y1 + inv_y2) / 2 #USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
+    inventario_texto = Text(Point(centrox_inv,centroy_inv),'Inventário')
+    inventario_texto.setSize(20)
+    inventario_texto.draw(win)
+#cuucucucucucucucuc
 
     caixa_retrato = Rectangle(Point(x1,y1), Point(x2,y2))
     caixa_retrato.draw(win)
@@ -69,12 +97,20 @@ def fase_jogo(win):
         Texto.setText(teste_texto_atual)
         Texto.setTextColor("white")
         #time.sleep(0.05)
-    
-    win.getMouse()
+
+    while True:
+        click = win.getMouse()
+        mx = click.getX()
+        my = click.getY()
+        if (x1 <= mx <= x2) and (inv_y1 <= my <= inv_y2):
+            inventario(win) #pega a funçao
+            #nao ta chamando.
+        elif (x1_dialogo <= mx <= x2_dialogo) and (y1 <= my <= y2): #qnd clica passa o texto
+            break
     return "fase2"
 
 def fase_jogo2(win):
-    background_c3=Image(Point(540,400),"imgs/imagemc3inicio.png")
+    background_c3=Image(Point(540,400),'imgs/fundo2.png')
     background_c3.draw(win)
     #personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
     #personagem.draw(win)
@@ -162,7 +198,6 @@ def fase_jogo3(win,player,inimigo_1):
             HP.draw(win)
         if inimigo_1["vida"] <=0:
             break            
->>>>>>> b0c36a63450c964299fe31320c3524757f0f40eb
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
