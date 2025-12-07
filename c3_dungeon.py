@@ -152,6 +152,7 @@ def fase_jogo3(win,player,inimigo_1):
         if inimigo_1["vida"] <=0 or player["vida_atual"] <= 0:
             break            
 
+
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
