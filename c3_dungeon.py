@@ -142,7 +142,14 @@ def fase_jogo3(win,player,inimigo_1):
             HP.setFill("White")
             HP.setSize(20)
             HP.draw(win)
-        if inimigo_1["vida"] <=0:
+            time.sleep(0.8)
+            player["vida_atual"]= player["vida_atual"]-inimigo_1["dano"]
+            HP_personagem.undraw()
+            HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+            HP_personagem.setFill("White")
+            HP_personagem.setSize(20)
+            HP_personagem.draw(win)
+        if inimigo_1["vida"] <=0 or player["vida_atual"] <= 0:
             break            
 
 def main ():
