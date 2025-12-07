@@ -2,7 +2,10 @@ from graphics import *
 import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
 import random as rd
 #lista sprites
-listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png']
+listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png','imgs/sprite_personagem/sprite3_costas.png']
+listasprite_frente = ['imgs/sprite_personagem/sprite1_frente.png','imgs/sprite_personagem/sprite2_frente.png','imgs/sprite_personagem/sprite3_frente.png']
+listasprite_esq = ['imgs/sprite_personagem/sprite1_esquerda.png','imgs/sprite_personagem/sprite2_esquerda.png','imgs/sprite_personagem/sprite3_esquerda.png','imgs/sprite_personagem/sprite4_esquerda.png','imgs/sprite_personagem/sprite5_esquerda.png']
+listasprite_dir = ['imgs/sprite_personagem/sprite1.png','imgs/sprite_personagem/sprite2.png','imgs/sprite_personagem/sprite3.png','imgs/sprite_personagem/sprite4.png','imgs/sprite_personagem/sprite5.png']
 
 def menu (win):
     background1= Image(Point(540,400),"imgs/c3.png")    #imagem background do menu
@@ -24,11 +27,21 @@ def menu (win):
             font.undraw()
             return "fase1"
         
+def inventario (win): #funçao apenas da janela, criar outra funçao pra armazenar os itens
+    win_inv = GraphWin("Inventário",400,400)
+    win_inv.setBackground("grey")
+    aviso = Text(Point(200, 380), "Clique para fechar")
+    aviso.draw(win_inv)
+    win_inv.getMouse()
+    win_inv.close()
+
 def fase_jogo(win):
+
     background2=Image(Point(540,400),"imgs/floresta2.png")
     background2.draw(win)
     ponto_central = Point(140,675)
     #retratoo
+
     foto_retrato = Image(ponto_central, "imgs/principal_menor.png")
     largura_retrato = foto_retrato.getWidth()
     altura_retrato = foto_retrato.getHeight()
@@ -43,6 +56,24 @@ def fase_jogo(win):
     x1_dialogo = x2 + 20 #x2 onde o retrato termina + 20px de espaço
     x2_dialogo = 1030 #x fixo
 
+    #inventariobotao
+
+    altura = 40
+    margem = 10
+
+    inv_y2 = y1 - margem
+    inv_y1 = inv_y2 - altura
+
+    
+    inventario_button = Rectangle(Point(x1,inv_y1),Point(x2,inv_y2))
+    inventario_button.setFill("orange")
+    inventario_button.draw(win)
+    centrox_inv = (x1 + x2) / 2 #msm coisa
+    centroy_inv = (inv_y1 + inv_y2) / 2 #USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
+    inventario_texto = Text(Point(centrox_inv,centroy_inv),'Inventário')
+    inventario_texto.setSize(20)
+    inventario_texto.draw(win)
+#cuucucucucucucucuc
 
     caixa_retrato = Rectangle(Point(x1,y1), Point(x2,y2))
     caixa_retrato.draw(win)
@@ -61,47 +92,74 @@ def fase_jogo(win):
     Texto=Text(Point(centrox_texto,centroy_texto),'')
     Texto.setTextColor("white")
     Texto.draw(win)
+
     for letra in teste: #nesse loop inicia a caixa de texto de forma que as letras sejam desenhadas devagar.
+        if win.checkMouse(): #se houve click enqt ta mosttando o texto
+            Texto.setText(teste) #se sim mostra o texto completo e para d mostra 
+            break 
         teste_texto_atual=teste_texto_atual+letra
         Texto.setText(teste_texto_atual)
         Texto.setTextColor("white")
-        #time.sleep(0.05)
-    
-    win.getMouse()
+        time.sleep(0.05)
+
+    while True:
+        click = win.getMouse()
+        mx = click.getX()
+        my = click.getY()
+        if (x1 <= mx <= x2) and (inv_y1 <= my <= inv_y2):
+            inventario(win) #pega a funçao
+            #nao ta chamando.
+        elif (x1_dialogo <= mx <= x2_dialogo) and (y1 <= my <= y2): #qnd clica passa o texto
+            break
     return "fase2"
 
 def fase_jogo2(win):
-    background_c3=Image(Point(540,400),"imgs/imagemc3inicio.png")
+    background_c3=Image(Point(540,400),'imgs/fundo2.png')
     background_c3.draw(win)
-    personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
-    personagem.draw(win)
-    player_x=540
-    player_y=400
+    #personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
+    #personagem.draw(win)
+    player_x= 540
+    player_y= 400
     #sprite_atual.draw(win)
-    personagem_esq=Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
-    cont =1
-    i = 0
-    while cont > 0:
-        cont+=1
+    sprite_atual =Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
+    sprite_atual.draw(win)
+    ultima_tecla = ''
+    andando = True
+    cont = 0
+    lista = listasprite_frente
+    while andando:
         tecla=win.checkKey()
-        if tecla == 'w':
-            personagem.undraw()
-            for i in listasprite_costas:
-                p_costas = Image(Point(player_x,player_y), listasprite_costas[0])
-                p_costas.move(0,-5)
-                player_y=-5
-                p_costas.draw(win)
-        elif tecla == 'a':
-            personagem.move(-5,0)
-            player_x=-5
-        elif tecla == 's':
-            personagem.move(0,5)
-            player_y=+5
-        elif tecla == 'd':
-            personagem.move(5,0)
-            player_x=+5
-        if tecla == "f":
-            return 'fase3'
+        if tecla == 'w' or tecla == 's' or tecla == 'd' or tecla == 'a':
+            sprite_atual.undraw()
+
+            if tecla != ultima_tecla:
+                cont = 0
+                ultima_tecla = tecla
+            if tecla == 'w':
+                player_y = player_y - 5
+                lista = listasprite_costas
+                #sprite_novo = listasprite_costas[cont]
+            elif tecla == 's':
+                player_y = player_y + 5
+                lista = listasprite_frente
+                #sprite_novo = listasprite_frente[cont]
+            elif tecla == 'a':
+                player_x = player_x - 5
+                lista = listasprite_esq
+            elif tecla == 'd':
+                player_x = player_x + 5
+                lista = listasprite_dir
+
+            #caralho NAO PARA DE DAR INDEX OUT OF RANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+            if cont >= len(lista):
+                cont = 0
+
+            sprite_novo = lista[cont]
+            sprite_atual =Image(Point(player_x,player_y),sprite_novo)
+            sprite_atual.draw(win)
+            cont += 1
+        time.sleep(0.10)
 
 def fase_jogo3(win,player,inimigo_1):
     background3=Image(Point(540,400),"imgs/floresta.png")
@@ -156,8 +214,6 @@ def fase_jogo3(win,player,inimigo_1):
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
-    if telas == "fase1":
-        fase_jogo(win)
     player = {
         "nome": 'nome_player',
         "vida_max": 100,
@@ -174,9 +230,9 @@ def main ():
         "vida_max": 200,
         "dano_normal":10,
         "dano_especial":20,
-
     }
 
+    #ATENÇAO PRA NAO CHAMAR DUAS VZS
     if telas == "fase1":
         telas=fase_jogo(win)
     if telas == "fase2":
