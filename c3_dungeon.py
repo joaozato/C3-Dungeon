@@ -173,20 +173,24 @@ def fase_jogo3(win,player,inimigo_1):
     monstro_neutro.draw(win)                                                     #spawn do monstro
     caixa_dialogo2=Rectangle(Point(320,650),(Point(740,800)))
     caixa_dialogo2.setFill('black')
-    caixa_dialogo2.draw(win)                                                    #spawn das caixas de dialogo
+    caixa_dialogo2.draw(win)
+    prisco_face=Image(Point(245,725),'imgs/prisco_face.png')
+    prisco_face.draw(win)                                               #spawn das caixas de dialogo
     texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!\n Aperte 1 para ataque normal, e 2 para ataque especial \n você só pode usar o especial uma vez por batalha.")
     texto_batalha.setFill("white")
     texto_batalha.draw(win)
     win.getMouse()                                      #aguarda o click do mouse
     texto_batalha.undraw()
-    caixa_dialogo2.undraw()                                                 
+    caixa_dialogo2.undraw()        
+    prisco_face.undraw()                                         
     coracao=Image(Point(150,100),'imgs/coracao_aliado.png')
     HP=Text(Point(905,100),f'{inimigo_1['vida']}')
     HP.setFill("White")
     HP.setSize(20)
-    coracao_inimigo=Image(Point(900,100),"imgs/coracao_inimigo.png")
+    coracao_inimigo_vivo=Image(Point(900,100),"imgs/coracao_aliado.png")
+    coracao_inimigo_morto=Image(Point(900,100),'imgs/coracao_inimigo.png')
     coracao.draw(win)
-    coracao_inimigo.draw(win)
+    coracao_inimigo_vivo.draw(win)
     HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
     HP_personagem.setFill("White")
     HP_personagem.setSize(20)
@@ -195,10 +199,14 @@ def fase_jogo3(win,player,inimigo_1):
     ataque_icon = Image(Point(230,100),'imgs/Attack.png')
     ataque_icon_ativo=Image(Point(230,100),'imgs/Attack_ativo.png')         #desenha os icones
     power_icon_ativado=Image(Point(290,100),'imgs/Power_ativado.png')
+    monstro_ataque=Image(Point(300,500),'imgs/monstro_ataque.png') #sprite ataque monstro
+    personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')     #sprite de dano do protagonista
     power_icon= Image(Point(290,100),'imgs/Power.png')
     ataque_icon.draw(win)
     power_icon.draw(win)
     especial_count=1                                                            #contador de especial durante a batalha
+    efeito_dano=Image(Point(600,500),'imgs/efeito_dano.png')            #declaramos variaveis de imagens que irão aparecer
+    monstro_dano=Image(Point(750,500),'imgs/monstro_sofrendo.png')
     while player["vida_atual"]>0 or inimigo_1["vida"]>0:                          #loop para batalha
         tecla=win.getKey()
         turno_player=True
@@ -208,76 +216,77 @@ def fase_jogo3(win,player,inimigo_1):
             ataque_icon_ativo.undraw()      #ela desaparece
             personagem_batalha.undraw()     #sprite de personagem neutro desaparece
             personagem_batalha2.draw(win)      #sprite de ataque do personagem aparece
-            efeito_dano=Image(Point(600,500),'imgs/efeito_dano.png')            #declaramos variaveis de imagens que irão aparecer
-            monstro_dano=Image(Point(750,500),'imgs/monstro_sofrendo.png')
             efeito_dano.draw(win)               #efeito de ataque   
             monstro_neutro.undraw()              #sprite monstro neutro some
             monstro_dano.draw(win)                   #monstro sofre o dano com o sprite aparecendo
             time.sleep(0.7)                         #pequeno delay 
             monstro_dano.undraw()                          #sprite do monstro desaparece
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano']               #recebe a variavel de dano
-            if inimigo_1["vida"] <= 0:                                       #faz a verificação mais importante, se for menor que zero, o monstro morre e a batalha nao continua
-                monstro_neutro.undraw()                                      #animação de morte do monstro
-                efeito_dano.undraw()                                           #efeito some
-                monstro_morto=Image(Point(750,500),'imgs/monstro_morto.png')     #mais declarações de variaveis de imagens
-                monstro_morto2=Image(Point(750,500),'imgs/monstro_morto2.png')
-                monstro_morto.draw(win)                                             #sprite do monstro morrendo
-                time.sleep(0.8)                         #delay antes dele fechar os olhos e morrer
-                monstro_morto.undraw()
-                monstro_morto2.draw(win)
-                time.sleep(0.2)
-                personagem_batalha2.undraw()
-                personagem_batalha.draw(win)
-            else:                                       #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
-                monstro_neutro.draw(win)                 #monstro volta a ser neutro
-                HP.undraw()                                                     #aqui o hp é atualizado, 
-                HP=Text(Point(905,100),f'{inimigo_1['vida']}')                      #do inimigo
-                HP.setFill("White")
-                HP.setSize(20)
-                HP.draw(win)
-                print(inimigo_1['vida'])                            #printa na tela
-                time.sleep(0.3) #delay para animação
-                monstro_ataque=Image(Point(300,500),'imgs/monstro_ataque.png')              #sprite de ataque do monstro
-                personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')     #sprite de dano do protagonista
-                efeito_dano.undraw()                        
-                personagem_batalha2.undraw()
-                personagem_batalha.draw(win)                                    
-                time.sleep(0.7)                                 #delay antes do monstro atacar
-                monstro_neutro.undraw()
-                monstro_ataque.draw(win)                    #monstro ataca
-                personagem_batalha.undraw()
-                personagem_sofrendo.draw(win)          #personagem recebe dano
-                time.sleep(0.9)                          #delay para animação de dano do monstro
-                monstro_ataque.undraw()
-                monstro_neutro.draw(win)
-                personagem_sofrendo.undraw()
-                personagem_batalha.draw(win)
-                time.sleep(0.2)                                         
-                player["vida_atual"]= player["vida_atual"]-inimigo_1["dano"]       #aqui fica a impressão do dano logo após o personagem executar
-                HP_personagem.undraw()                                           #uma ação
-                HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
-                HP_personagem.setFill("White")
-                HP_personagem.setSize(20)
-                HP_personagem.draw(win)                                                 #hp do personagem aparece na tela atualizado
-        if tecla == '2' and turno_player == True and especial_count > 0:            #código para o super especial
+        if tecla == '2' and turno_player == True:
+            monstro_neutro.undraw()
+            personagem_batalha.undraw()            #código para o super especial
             power_icon_ativado.draw(win)
-            time.sleep(0.6)
+            personagem_batalha2.draw(win)
+            monstro_dano.draw(win)
+            time.sleep(0.9)
+            monstro_dano.undraw()
             power_icon_ativado.undraw()
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano especial']
-            print(inimigo_1['vida'])
             HP.undraw()
             HP=Text(Point(905,100),f'{inimigo_1['vida']}')
             HP.setFill("White")
             HP.setSize(20)
             HP.draw(win)
-            time.sleep(0.8)
             player["vida_atual"]= player["vida_atual"]-inimigo_1["dano"]
-            HP_personagem.undraw()
+            especial_count -=1
+        if inimigo_1["vida"] <= 0:
+            coracao_inimigo_vivo.undraw()
+            coracao_inimigo_morto.draw(win)
+            HP.undraw()                                                     #aqui o hp é atualizado, 
+            HP=Text(Point(905,100),f'{inimigo_1['vida']}')                      #do inimigo
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)                                       #faz a verificação mais importante, se for menor que zero, o monstro morre e a batalha nao continua
+            monstro_neutro.undraw()                                      #animação de morte do monstro
+            efeito_dano.undraw()                                           #efeito some
+            monstro_morto=Image(Point(750,500),'imgs/monstro_morto.png')     #mais declarações de variaveis de imagens
+            monstro_morto2=Image(Point(750,500),'imgs/monstro_morto2.png')
+            monstro_morto.draw(win)                                             #sprite do monstro morrendo
+            time.sleep(0.8)                         #delay antes dele fechar os olhos e morrer
+            monstro_morto.undraw()
+            monstro_morto2.draw(win)
+            time.sleep(0.2)
+            personagem_batalha2.undraw()
+            personagem_batalha.draw(win)
+        else:                                       #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
+            monstro_neutro.draw(win)                 #monstro volta a ser neutro
+            HP.undraw()                                                     #aqui o hp é atualizado, 
+            HP=Text(Point(905,100),f'{inimigo_1['vida']}')                      #do inimigo
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)
+            print(inimigo_1['vida'])                            #printa na tela
+            time.sleep(0.3) #delay para animação             
+            efeito_dano.undraw()                        
+            personagem_batalha2.undraw()
+            personagem_batalha.draw(win)                                    
+            time.sleep(0.7)                                 #delay antes do monstro atacar
+            monstro_neutro.undraw()
+            monstro_ataque.draw(win)                    #monstro ataca
+            personagem_batalha.undraw()
+            personagem_sofrendo.draw(win)          #personagem recebe dano
+            time.sleep(0.9)                          #delay para animação de dano do monstro
+            monstro_ataque.undraw()
+            monstro_neutro.draw(win)
+            personagem_sofrendo.undraw()
+            personagem_batalha.draw(win)
+            time.sleep(0.2)                                         
+            player["vida_atual"]= player["vida_atual"]-inimigo_1["dano"]       #aqui fica a impressão do dano logo após o personagem executar
+            HP_personagem.undraw()                                           #uma ação
             HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
             HP_personagem.setFill("White")
             HP_personagem.setSize(20)
-            HP_personagem.draw(win)
-            especial_count -=1
+            HP_personagem.draw(win)                                                 #hp do personagem aparece na tela atualizado
         if inimigo_1["vida"] <=0 or player["vida_atual"] <= 0:
             break            
 '''
