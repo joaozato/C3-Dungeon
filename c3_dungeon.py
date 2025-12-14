@@ -199,9 +199,9 @@ def fase_jogo3(win,player,inimigo_1):
     ataque_icon = Image(Point(230,100),'imgs/Attack.png')
     ataque_icon_ativo=Image(Point(230,100),'imgs/Attack_ativo.png')         #desenha os icones
     power_icon_ativado=Image(Point(290,100),'imgs/Power_ativado.png')
+    power_icon= Image(Point(290,100),'imgs/Power.png')
     monstro_ataque=Image(Point(300,500),'imgs/monstro_ataque.png') #sprite ataque monstro
     personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')     #sprite de dano do protagonista
-    power_icon= Image(Point(290,100),'imgs/Power.png')
     ataque_icon.draw(win)
     power_icon.draw(win)
     especial_count=1                                                            #contador de especial durante a batalha
@@ -222,7 +222,7 @@ def fase_jogo3(win,player,inimigo_1):
             time.sleep(0.7)                         #pequeno delay 
             monstro_dano.undraw()                          #sprite do monstro desaparece
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano']               #recebe a variavel de dano
-        if tecla == '2' and turno_player == True:
+        if tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             monstro_neutro.undraw()
             personagem_batalha.undraw()            #código para o super especial
             power_icon_ativado.draw(win)
@@ -288,7 +288,18 @@ def fase_jogo3(win,player,inimigo_1):
             HP_personagem.setSize(20)
             HP_personagem.draw(win)                                                 #hp do personagem aparece na tela atualizado
         if inimigo_1["vida"] <=0 or player["vida_atual"] <= 0:
-            break            
+            break
+    win.getMouse()
+    background3.undraw()
+    personagem_batalha.undraw()
+    monstro_neutro.undraw()
+    HP.undraw()
+    HP_personagem.undraw()
+    coracao.undraw()
+    coracao_inimigo_vivo.undraw()
+    ataque_icon.undraw()
+    power_icon.undraw()
+    return 'fase4'            
 '''
 No geral dentro da função 3, ocorre um loop que define toda a batalha, com loops de animações, já que o jogo funciona
 em turnos, o que acontece é a aparição das animações, com os delays setados para dar a impressão de movimento, e
@@ -296,6 +307,16 @@ que o jogador consiga visualizar o que está acontecendo com calma, existe um if
 que antes havia um bug que o inimigo mesmo com a vida <0 , acabava te batendo e não morrendo, isso foi resolvido com uma verificação
 que caso contrário for falsa, continua a batalha.
 '''
+
+def fase_jogo4 (win,player,cobra):
+    background4=Image(Point(540,400),"imgs/background4.png")                           #construção da interface e cenário
+    cobra=Image(Point(750,500),'imgs/cobra.png')
+    background4.draw(win)
+    cobra.draw(win)
+    personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")          
+    personagem_batalha.draw(win)                                                #spawn do personagem
+    personagem_batalha2=Image(Point(500,500),"imgs/personage_combate_2.png")
+    win.getMouse()
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
@@ -318,6 +339,14 @@ def main ():
         "dano_normal":10,
         "dano_especial":20,
     }
+    prisco = {
+        "dano":20,
+        "vida_max":300,
+    }
+    cobra = {
+        "dano":15,
+        "vida_max":500
+    }
 
     #ATENÇAO PRA NAO CHAMAR DUAS VZS
     if telas == "fase1":
@@ -325,7 +354,9 @@ def main ():
     if telas == "fase2":
         telas = fase_jogo2(win)
     if telas == "fase3":
-        fase_jogo3(win,player,inimigo_1)
-    win.getMouse()
+        telas = fase_jogo3(win,player,inimigo_1)
+    if telas == 'fase4':
+       fase_jogo4(win,player,cobra)
+    
     
 main()
