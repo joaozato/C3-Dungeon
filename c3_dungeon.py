@@ -334,22 +334,6 @@ def fase_jogo3(win, player, inimigo_1):
             time.sleep(0.7)                                                     #pequeno delay 
             monstro_dano.undraw()                                               #sprite do monstro desaparece
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano']              #recebe a variavel de dano
-        if tecla == '2' and turno_player == True: 
-    while player["vida_atual"] > 0 or inimigo_1["vida"] > 0:                          #loop para batalha
-        tecla = win.getKey()
-        turno_player = True
-        if tecla == "1" and turno_player == True:     #jogador ataca
-            ataque_icon_ativo.draw(win)       #espada em cima da interface pisca sinalizando que está ativa
-            time.sleep(0.9)                 #delay até ela desaparecer
-            ataque_icon_ativo.undraw()      #ela desaparece
-            personagem_batalha.undraw()     #sprite de personagem neutro desaparece
-            personagem_batalha2.draw(win)      #sprite de ataque do personagem aparece
-            efeito_dano.draw(win)               #efeito de ataque   
-            monstro_neutro.undraw()              #sprite monstro neutro some
-            monstro_dano.draw(win)                   #monstro sofre o dano com o sprite aparecendo
-            time.sleep(0.7)                         #pequeno delay 
-            monstro_dano.undraw()                          #sprite do monstro desaparece
-            inimigo_1["vida"] = inimigo_1["vida"] - player["dano"]               #recebe a variavel de dano
         if tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             monstro_neutro.undraw()
             personagem_batalha.undraw()                                         #código para o super especial
@@ -440,7 +424,7 @@ def fase_jogo4 (win,player,cobra):
     #realiza declaração de variaveis que serão usadas
     #aqui são declaradas o cenário, personagem e inimigo.
     background4=Image(Point(540,400),"imgs/background4.png")                           #construção da interface e cenário
-    cobra=Image(Point(750,500),'imgs/cobra.png')
+    cobraimg=Image(Point(750,500),'imgs/cobra.png')
     personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")          
     prisco_face=Image(Point(245,725),'imgs/prisco_face.png')
 
@@ -454,7 +438,7 @@ def fase_jogo4 (win,player,cobra):
     coracao=Image(Point(150,100),'imgs/coracao_aliado.png')
     coracao_inimigo_morto=Image(Point(900,100),'imgs/coracao_inimigo.png')
     coracao_inimigo_vivo=Image(Point(900,100),"imgs/coracao_aliado.png")
-    HP=Text(Point(905,100),f'{cobra['vida']}')
+    HP=Text(Point(905,100),f'{cobra['vida_max']}')
     HP.setFill("White")
     HP.setSize(20)
     HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
@@ -469,9 +453,9 @@ def fase_jogo4 (win,player,cobra):
 
     background4.draw(win)
     personagem_batalha.draw(win)
-    cobra.draw(win)
+    cobraimg.draw(win)
     caixa_dialogo2.draw(win)
-    prisco_face.draw(win)    
+    prisco_face.draw(win)
     texto_batalha.draw(win)
     HP.draw(win)                                                                #desenha os hps
     HP_personagem.draw(win)
@@ -481,6 +465,7 @@ def fase_jogo4 (win,player,cobra):
     while player['vida_max'] >0 or cobra['vida_max'] >0:
         tecla=win.getKey()
         if tecla == '1':
+            
             
 
 
