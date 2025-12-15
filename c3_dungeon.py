@@ -109,6 +109,7 @@ def inventario(win):  # funçao apenas da janela, criar outra funçao pra armaze
 
 def fase_jogo(win):
 
+
     background2 = Image(Point(540, 400), "imgs/floresta2.png")
     background2.draw(win)
     ponto_central = Point(140, 675)
@@ -194,6 +195,10 @@ def fase_jogo(win):
 
 
 def fase_jogo2(win):
+
+    LARGURA_MAX = 1080
+    ALTURA_MAX = 800
+
     background_c3 = Image(Point(540, 400), "imgs/fundo2.png")
     background_c3.draw(win)
 
@@ -248,6 +253,27 @@ def fase_jogo2(win):
             cont += 1
         time.sleep(0.10)
 
+        if player_x < 0:
+            background_c3.undraw()
+            sprite_atual.undraw()
+            novo_x = LARGURA_MAX - 50
+            novo_y = player_y
+            return "mapa_city"
+        
+        elif player_x > LARGURA_MAX:
+            background_c3.undraw()
+            sprite_atual.undraw()
+            novo_x = 50 
+            novo_y = player_y
+            return ("mapa_outra_floresta", novo_x, novo_y)
+
+#AQUI É AS FUNÇOES DOS MAPAS! 
+
+def mapa_city(win,player_x,player_y):
+    LARGURA_MAX = 1080
+    ALTURA_MAX = 800
+
+    #AQUI VOU ADD MESMA LOGICA DA FASE 2, SOQ MUDANDO BACKGROUNDS
 
 def fase_jogo3(win, player, inimigo_1):
     background3 = Image(Point(540, 400), "imgs/floresta.png")                           #construção da interface e cenário
