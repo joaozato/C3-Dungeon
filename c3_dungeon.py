@@ -1,62 +1,135 @@
 from graphics import *
-import time                                           #importando time para diminuir a velocidade que as letras aparecem no dialogo.
+import time  # importando time para diminuir a velocidade que as letras aparecem no dialogo.
 import random as rd
-#lista sprites
-listasprite_costas = ['imgs/sprite_personagem/sprite1_costas.png','imgs/sprite_personagem/sprite2_costas.png','imgs/sprite_personagem/sprite3_costas.png']
-listasprite_frente = ['imgs/sprite_personagem/sprite1_frente.png','imgs/sprite_personagem/sprite2_frente.png','imgs/sprite_personagem/sprite3_frente.png']
-listasprite_esq = ['imgs/sprite_personagem/sprite1_esquerda.png','imgs/sprite_personagem/sprite2_esquerda.png','imgs/sprite_personagem/sprite3_esquerda.png','imgs/sprite_personagem/sprite4_esquerda.png','imgs/sprite_personagem/sprite5_esquerda.png']
-listasprite_dir = ['imgs/sprite_personagem/sprite1.png','imgs/sprite_personagem/sprite2.png','imgs/sprite_personagem/sprite3.png','imgs/sprite_personagem/sprite4.png','imgs/sprite_personagem/sprite5.png']
 
-def menu (win):
-    background1= Image(Point(540,400),"imgs/c3.png")    #imagem background do menu
-    background1.draw(win)           
-    font=Image(Point(540,200),"imgs/image-removebg-preview.png")  #fonte utilizada para nome do jogo
+# lista sprites
+listasprite_costas = [
+    "imgs/sprite_personagem/sprite1_costas.png",
+    "imgs/sprite_personagem/sprite2_costas.png",
+    "imgs/sprite_personagem/sprite3_costas.png",
+]
+listasprite_frente = [
+    "imgs/sprite_personagem/sprite1_frente.png",
+    "imgs/sprite_personagem/sprite2_frente.png",
+    "imgs/sprite_personagem/sprite3_frente.png",
+]
+listasprite_esq = [
+    "imgs/sprite_personagem/sprite1_esquerda.png",
+    "imgs/sprite_personagem/sprite2_esquerda.png",
+    "imgs/sprite_personagem/sprite3_esquerda.png",
+    "imgs/sprite_personagem/sprite4_esquerda.png",
+    "imgs/sprite_personagem/sprite5_esquerda.png",
+]
+listasprite_dir = [
+    "imgs/sprite_personagem/sprite1.png",
+    "imgs/sprite_personagem/sprite2.png",
+    "imgs/sprite_personagem/sprite3.png",
+    "imgs/sprite_personagem/sprite4.png",
+    "imgs/sprite_personagem/sprite5.png",
+]
+
+# VARIAVEIS GLOBAIS
+
+inventarior = {"pocao_de_vida": 3, "espada": 1}
+
+itens = {
+    "pocao_de_vida": {
+        "nome": "Poção de Vida",
+        "tipo": "Consumível",
+        "cura": 50,
+        "desc": "Restaura os seus pontos de vida",
+    },
+    "espada": {"nome": "Espada", "tipo": "Arma", "dano": "15", "desc": "É uma espada =D !"},
+}
+
+
+def menu(win):
+    background1 = Image(Point(540, 400), "imgs/c3.png")  # imagem background do menu
+    background1.draw(win)
+    font = Image(
+        Point(540, 200), "imgs/image-removebg-preview.png"
+    )  # fonte utilizada para nome do jogo
     font.draw(win)
-    botao_inicial=Rectangle(Point(430,700),Point(630,750))   #retangulo de botão iniciar
-    iniciar=Text(Point(530,725),"Iniciar")
+    botao_inicial = Rectangle(
+        Point(430, 700), Point(630, 750)
+    )  # retangulo de botão iniciar
+    iniciar = Text(Point(530, 725), "Iniciar")
     iniciar.setSize(20)
     botao_inicial.setFill("orange")
     botao_inicial.draw(win)
     iniciar.draw(win)
-    while True:                                   #enquanto for verdadeiro...
+    while True:  # enquanto for verdadeiro...
         click = win.getMouse()
-        if (430 <= click.getX() <= 630) and (700 <= click.getY() <=750):  #se o usuario clicar no range do botão, então, é levado até o proximo cenário
-            botao_inicial.undraw()                                          #quando ele clica, os botões anteriores e background são apagados levando a função de tela 1.
+        if (430 <= click.getX() <= 630) and (
+            700 <= click.getY() <= 750
+        ):  # se o usuario clicar no range do botão, então, é levado até o proximo cenário
+            botao_inicial.undraw()  # quando ele clica, os botões anteriores e background são apagados levando a função de tela 1.
             iniciar.undraw()
             background1.undraw()
             font.undraw()
             return "fase1"
-        
-def inventario (win): #funçao apenas da janela, criar outra funçao pra armazenar os itens
-    win_inv = GraphWin("Inventário",400,400)
+
+
+def inventario(win):  # funçao apenas da janela, criar outra funçao pra armazenar os itens
+    win_inv = GraphWin("Inventário", 400, 400)
     win_inv.setBackground("grey")
+    y = 50
+    titulo = Text(Point(200, 20), "Inventário")
+    titulo.setSize(18)
+    titulo.setStyle("bold")
+    titulo.draw(win_inv)
+    
+
+    for item_id, qnt in inventarior.items():
+        info = itens.get(item_id)
+        if info:
+            nome_completo = info['nome']
+            descricao = info['desc']
+            retangulo = Rectangle(Point(10, y - 15), Point(390, y + 40))
+            retangulo.setFill("white")
+            retangulo.draw(win_inv)
+
+            texto_nome = Text(Point(200, y), f"{nome_completo} (x{qnt})")
+            texto_nome.setSize(12)
+            texto_nome.setStyle("bold")
+            texto_nome.draw(win_inv)
+
+            texto_desc = Text(Point(200, y + 20), descricao)
+            texto_desc.setSize(10)
+            texto_desc.draw(win_inv)
+
+            y += 60
+        if y > 400:
+            break
     aviso = Text(Point(200, 380), "Clique para fechar")
     aviso.draw(win_inv)
     win_inv.getMouse()
     win_inv.close()
 
+
 def fase_jogo(win):
 
-    background2=Image(Point(540,400),"imgs/floresta2.png")
+
+    background2 = Image(Point(540, 400), "imgs/floresta2.png")
     background2.draw(win)
-    ponto_central = Point(140,675)
-    #retratoo
+    ponto_central = Point(140, 675)
+    # retratoo
 
     foto_retrato = Image(ponto_central, "imgs/principal_menor.png")
     largura_retrato = foto_retrato.getWidth()
     altura_retrato = foto_retrato.getHeight()
 
-    #calculo pra conseguir encaixar o sprite na caixa
+    # calculo pra conseguir encaixar o sprite na caixa
 
-    x1 = 140 - (largura_retrato / 2) # centro - metade do tamanho
+    x1 = 140 - (largura_retrato / 2)  # centro - metade do tamanho
     y1 = 675 - (altura_retrato / 2)
     x2 = 140 + (largura_retrato / 2)
     y2 = 675 + (altura_retrato / 2)
 
-    x1_dialogo = x2 + 20 #x2 onde o retrato termina + 20px de espaço
-    x2_dialogo = 1030 #x fixo
+    x1_dialogo = x2 + 20  # x2 onde o retrato termina + 20px de espaço
+    x2_dialogo = 1030  # x fixo
 
-    #inventariobotao
+    # inventariobotao
 
     altura = 40
     margem = 10
@@ -64,40 +137,45 @@ def fase_jogo(win):
     inv_y2 = y1 - margem
     inv_y1 = inv_y2 - altura
 
-    
-    inventario_button = Rectangle(Point(x1,inv_y1),Point(x2,inv_y2))
+    inventario_button = Rectangle(Point(x1, inv_y1), Point(x2, inv_y2))
     inventario_button.setFill("orange")
     inventario_button.draw(win)
-    centrox_inv = (x1 + x2) / 2 #msm coisa
-    centroy_inv = (inv_y1 + inv_y2) / 2 #USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
-    inventario_texto = Text(Point(centrox_inv,centroy_inv),'Inventário')
+    centrox_inv = (x1 + x2) / 2  # msm coisa
+    centroy_inv = (
+        inv_y1 + inv_y2
+    ) / 2  # USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
+    inventario_texto = Text(Point(centrox_inv, centroy_inv), "Inventário")
     inventario_texto.setSize(20)
     inventario_texto.draw(win)
-#cuucucucucucucucuc
+    # cuucucucucucucucuc
 
-    caixa_retrato = Rectangle(Point(x1,y1), Point(x2,y2))
+    caixa_retrato = Rectangle(Point(x1, y1), Point(x2, y2))
     caixa_retrato.draw(win)
     caixa_retrato.setFill("black")
     foto_retrato.draw(win)
-    caixa_dialogo=Rectangle(Point(x1_dialogo,y1),Point(x2_dialogo,y2))   
+    caixa_dialogo = Rectangle(Point(x1_dialogo, y1), Point(x2_dialogo, y2))
     caixa_dialogo.setFill("black")
 
-    #---textooo---
+    # ---textooo---
     centrox_texto = (x1_dialogo + x2_dialogo) / 2
     centroy_texto = (y1 + y2) / 2
     caixa_dialogo.draw(win)
 
-    teste='Você foi o escolhido para defender o C3\n Em um momento de fragilidade, quando os exames \n estão a beira de acontecer \n as criaturas da infernais querem as almas dos estudantes \n só você pode impedir isso Estudante!'
-    teste_texto_atual=''
-    Texto=Text(Point(centrox_texto,centroy_texto),'')
+    teste = "Você foi o escolhido para defender o C3\n Em um momento de fragilidade, quando os exames \n estão a beira de acontecer \n as criaturas da infernais querem as almas dos estudantes \n só você pode impedir isso Estudante!"
+    teste_texto_atual = ""
+    Texto = Text(Point(centrox_texto, centroy_texto), "")
     Texto.setTextColor("white")
     Texto.draw(win)
 
-    for letra in teste: #nesse loop inicia a caixa de texto de forma que as letras sejam desenhadas devagar.
-        if win.checkMouse(): #se houve click enqt ta mosttando o texto
-            Texto.setText(teste) #se sim mostra o texto completo e para d mostra 
-            break 
-        teste_texto_atual=teste_texto_atual+letra
+    for (
+        letra
+    ) in (
+        teste
+    ):  # nesse loop inicia a caixa de texto de forma que as letras sejam desenhadas devagar.
+        if win.checkMouse():  # se houve click enqt ta mosttando o texto
+            Texto.setText(teste)  # se sim mostra o texto completo e para d mostra
+            break
+        teste_texto_atual = teste_texto_atual + letra
         Texto.setText(teste_texto_atual)
         Texto.setTextColor("white")
         time.sleep(0.05)
@@ -107,64 +185,98 @@ def fase_jogo(win):
         mx = click.getX()
         my = click.getY()
         if (x1 <= mx <= x2) and (inv_y1 <= my <= inv_y2):
-            inventario(win) #pega a funçao
-            #nao ta chamando.
-        elif (x1_dialogo <= mx <= x2_dialogo) and (y1 <= my <= y2): #qnd clica passa o texto
+            inventario(win)  # pega a funçao
+            # nao ta chamando.
+        elif (x1_dialogo <= mx <= x2_dialogo) and (
+            y1 <= my <= y2
+        ):  # qnd clica passa o texto
             break
     return "fase2"
 
+
 def fase_jogo2(win):
-    background_c3=Image(Point(540,400),'imgs/fundo2.png')
+
+    LARGURA_MAX = 1080
+    ALTURA_MAX = 800
+
+    background_c3 = Image(Point(540, 400), "imgs/fundo2.png")
     background_c3.draw(win)
-    #personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
-    #personagem.draw(win)
-    player_x= 540
-    player_y= 400
-    #sprite_atual.draw(win)
-    sprite_atual =Image(Point(player_x,player_y),'imgs/sprite_personagem/sprite1_esquerda.png')
+
+    # personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
+    # personagem.draw(win)
+    player_x = 540
+    player_y = 400
+    # sprite_atual.draw(win)
+
+    sprite_atual = Image(
+        Point(player_x, player_y), "imgs/sprite_personagem/sprite1_esquerda.png"
+    )
     sprite_atual.draw(win)
-    ultima_tecla = ''
+
+    ultima_tecla = ""
     andando = True
     cont = 0
     lista = listasprite_frente
     while andando:
-        tecla=win.checkKey()
+        tecla = win.checkKey()
         if tecla == 'f':            #tive que colocar o botão de teste aqui em cima, caso contrário não abre o cenário de batalha
                 return 'fase3'
-        if tecla == 'w' or tecla == 's' or tecla == 'd' or tecla == 'a':
+        if tecla == "w" or tecla == "s" or tecla == "d" or tecla == "a":
             sprite_atual.undraw()
 
             if tecla != ultima_tecla:
                 cont = 0
                 ultima_tecla = tecla
-            if tecla == 'w':
+            if tecla == "w":
                 player_y = player_y - 5
                 lista = listasprite_costas
-                #sprite_novo = listasprite_costas[cont]
-            elif tecla == 's':
+                # sprite_novo = listasprite_costas[cont]
+            elif tecla == "s":
                 player_y = player_y + 5
                 lista = listasprite_frente
-                #sprite_novo = listasprite_frente[cont]
-            elif tecla == 'a':
+                # sprite_novo = listasprite_frente[cont]
+            elif tecla == "a":
                 player_x = player_x - 5
                 lista = listasprite_esq
-            elif tecla == 'd':
+            elif tecla == "d":
                 player_x = player_x + 5
                 lista = listasprite_dir
 
-            #caralho NAO PARA DE DAR INDEX OUT OF RANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+            # caralho NAO PARA DE DAR INDEX OUT OF RANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
             if cont >= len(lista):
                 cont = 0
 
             sprite_novo = lista[cont]
-            sprite_atual =Image(Point(player_x,player_y),sprite_novo)
+            sprite_atual = Image(Point(player_x, player_y), sprite_novo)
             sprite_atual.draw(win)
             cont += 1
         time.sleep(0.10)
 
-def fase_jogo3(win,player,inimigo_1):
-    background3=Image(Point(540,400),"imgs/floresta.png")                           #construção da interface e cenário
+        if player_x < 0:
+            background_c3.undraw()
+            sprite_atual.undraw()
+            novo_x = LARGURA_MAX - 50
+            novo_y = player_y
+            return "mapa_city"
+        
+        elif player_x > LARGURA_MAX:
+            background_c3.undraw()
+            sprite_atual.undraw()
+            novo_x = 50 
+            novo_y = player_y
+            return ("mapa_outra_floresta", novo_x, novo_y)
+
+#AQUI É AS FUNÇOES DOS MAPAS! 
+
+def mapa_city(win,player_x,player_y):
+    LARGURA_MAX = 1080
+    ALTURA_MAX = 800
+
+    #AQUI VOU ADD MESMA LOGICA DA FASE 2, SOQ MUDANDO BACKGROUNDS
+
+def fase_jogo3(win, player, inimigo_1):
+    background3 = Image(Point(540, 400), "imgs/floresta.png")                           #construção da interface e cenário
     background3.draw(win)
     personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")          
     personagem_batalha.draw(win)                                                    #spawn do personagem
@@ -183,15 +295,15 @@ def fase_jogo3(win,player,inimigo_1):
     texto_batalha.undraw()
     caixa_dialogo2.undraw()        
     prisco_face.undraw()                                         
-    coracao=Image(Point(150,100),'imgs/coracao_aliado.png')
-    HP=Text(Point(905,100),f'{inimigo_1['vida']}')
+    coracao = Image(Point(150, 100), "imgs/coracao_aliado.png")
+    HP = Text(Point(905, 100), f"{inimigo_1['vida']}")
     HP.setFill("White")
     HP.setSize(20)
-    coracao_inimigo_vivo=Image(Point(900,100),"imgs/coracao_aliado.png")
+    coracao_inimigo_vivo = Image(Point(900, 100), "imgs/coracao_aliado.png")
     coracao_inimigo_morto=Image(Point(900,100),'imgs/coracao_inimigo.png')
     coracao.draw(win)
     coracao_inimigo_vivo.draw(win)
-    HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+    HP_personagem = Text(Point(155, 100), f"{player['vida_atual']}")
     HP_personagem.setFill("White")
     HP_personagem.setSize(20)
     HP_personagem.draw(win)
@@ -223,6 +335,22 @@ def fase_jogo3(win,player,inimigo_1):
             monstro_dano.undraw()                                               #sprite do monstro desaparece
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano']              #recebe a variavel de dano
         if tecla == '2' and turno_player == True: 
+    while player["vida_atual"] > 0 or inimigo_1["vida"] > 0:                          #loop para batalha
+        tecla = win.getKey()
+        turno_player = True
+        if tecla == "1" and turno_player == True:     #jogador ataca
+            ataque_icon_ativo.draw(win)       #espada em cima da interface pisca sinalizando que está ativa
+            time.sleep(0.9)                 #delay até ela desaparecer
+            ataque_icon_ativo.undraw()      #ela desaparece
+            personagem_batalha.undraw()     #sprite de personagem neutro desaparece
+            personagem_batalha2.draw(win)      #sprite de ataque do personagem aparece
+            efeito_dano.draw(win)               #efeito de ataque   
+            monstro_neutro.undraw()              #sprite monstro neutro some
+            monstro_dano.draw(win)                   #monstro sofre o dano com o sprite aparecendo
+            time.sleep(0.7)                         #pequeno delay 
+            monstro_dano.undraw()                          #sprite do monstro desaparece
+            inimigo_1["vida"] = inimigo_1["vida"] - player["dano"]               #recebe a variavel de dano
+        if tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             monstro_neutro.undraw()
             personagem_batalha.undraw()                                         #código para o super especial
             power_icon_ativado.draw(win)
@@ -231,9 +359,9 @@ def fase_jogo3(win,player,inimigo_1):
             time.sleep(0.9)
             monstro_dano.undraw()
             power_icon_ativado.undraw()
-            inimigo_1['vida'] = inimigo_1['vida'] - player['dano especial']
+            inimigo_1["vida"] = inimigo_1['vida'] - player['dano especial']
             HP.undraw()
-            HP=Text(Point(905,100),f'{inimigo_1['vida']}')
+            HP = Text(Point(905, 100), f"{inimigo_1['vida']}")
             HP.setFill("White")
             HP.setSize(20)
             HP.draw(win)
@@ -360,22 +488,27 @@ def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
     player = {
-        "nome": 'nome_player',
+        "nome": "nome_player",
         "vida_max": 100,
         "vida_atual": 100,
         "dano": 15,
         "pocao": 2,
-        "dano especial":30
+        "dano especial":30,
     }
-    inimigo_1 = {
-        "vida":50,
-        "dano":5
-    }
+    inimigo_1 = {"vida": 50, "dano": 5}
     monstro_neutro = {
         "nome": "monstro_neutro",
         "vida_max": 200,
-        "dano_normal":10,
-        "dano_especial":20,
+        "dano_normal": 10,
+        "dano_especial": 20,
+    }
+    prisco = {
+        "dano":20,
+        "vida_max":300,
+    }
+    cobra = {
+        "dano":15,
+        "vida_max":500
     }
     prisco = {
         "dano":20,
@@ -386,15 +519,16 @@ def main ():
         "vida_max":500
     }
 
-    #ATENÇAO PRA NAO CHAMAR DUAS VZS
+    # ATENÇAO PRA NAO CHAMAR DUAS VZS
     if telas == "fase1":
-        telas=fase_jogo(win)
+        telas = fase_jogo(win)
     if telas == "fase2":
         telas = fase_jogo2(win)
     if telas == "fase3":
-        telas = fase_jogo3(win,player,inimigo_1)
+        telas = fase_jogo3(win, player, inimigo_1)
     if telas == 'fase4':
        fase_jogo4(win,player,cobra)
     
-    
+
+
 main()
