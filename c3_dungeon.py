@@ -276,52 +276,63 @@ def mapa_city(win,player_x,player_y):
     #AQUI VOU ADD MESMA LOGICA DA FASE 2, SOQ MUDANDO BACKGROUNDS
 
 def fase_jogo3(win, player, inimigo_1):
-    background3 = Image(Point(540, 400), "imgs/floresta.png")                           #construção da interface e cenário
-    background3.draw(win)
-    personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")          
-    personagem_batalha.draw(win)                                                    #spawn do personagem
-    personagem_batalha2=Image(Point(500,500),"imgs/personage_combate_2.png")
-    monstro_neutro=Image(Point(750,500),"imgs/monstro_neutro.png")              
-    monstro_neutro.draw(win)                                                        #spawn do monstro
-    caixa_dialogo2=Rectangle(Point(320,650),(Point(740,800)))
-    caixa_dialogo2.setFill('black')
-    caixa_dialogo2.draw(win)
-    prisco_face=Image(Point(245,725),'imgs/prisco_face.png')
-    prisco_face.draw(win)                                                           #spawn das caixas de dialogo
-    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!\n Aperte 1 para ataque normal, e 2 para ataque especial \n você só pode usar o especial uma vez por batalha.")
-    texto_batalha.setFill("white")
-    texto_batalha.draw(win)
-    win.getMouse()                                                                  #aguarda o click do mouse
-    texto_batalha.undraw()
-    caixa_dialogo2.undraw()        
-    prisco_face.undraw()                                         
-    coracao = Image(Point(150, 100), "imgs/coracao_aliado.png")
-    HP = Text(Point(905, 100), f"{inimigo_1['vida']}")
-    HP.setFill("White")
-    HP.setSize(20)
-    coracao_inimigo_vivo = Image(Point(900, 100), "imgs/coracao_aliado.png")
-    coracao_inimigo_morto=Image(Point(900,100),'imgs/coracao_inimigo.png')
-    coracao.draw(win)
-    coracao_inimigo_vivo.draw(win)
-    HP_personagem = Text(Point(155, 100), f"{player['vida_atual']}")
-    HP_personagem.setFill("White")
-    HP_personagem.setSize(20)
-    HP_personagem.draw(win)
-    HP.draw(win)                                                                #desenha os hps
-    ataque_icon = Image(Point(230,100),'imgs/Attack.png')
-    ataque_icon_ativo=Image(Point(230,100),'imgs/Attack_ativo.png')             #desenha os icones
-    power_icon_ativado=Image(Point(290,100),'imgs/Power_ativado.png')
-    power_icon= Image(Point(290,100),'imgs/Power.png')
+    #CONSTRUÇÃO DO CENÁRIO, SPRITES DOS PERSONAGENS QUE VÃO SER UTILIZADOS NAS VERIFICAÇÕES NO CENÁRIO INICIAL
+
+    background3 = Image(Point(540, 400), "imgs/floresta.png")                     #construção da interface e cenário
+    personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")        #sprite personagem em pose neutra de batalha
+    personagem_batalha2=Image(Point(500,500),"imgs/personage_combate_2.png")      #sprite personagem em pose de ataque
+    personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')      #sprite de dano do protagonista
+    monstro_neutro=Image(Point(750,500),"imgs/monstro_neutro.png")                #sprite do monstro neutro
+    monstro_sofrendo=Image(Point(750,500),'imgs/monstro_sofrendo.png')                #sprite do monstro de dano
     monstro_ataque=Image(Point(300,500),'imgs/monstro_ataque.png')                #sprite ataque monstro
-    personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')     #sprite de dano do protagonista
+    coracao_inimigo_vivo = Image(Point(900, 100), "imgs/coracao_aliado.png")      #sprite do coração do inimigo enquanto vivo
+    coracao_inimigo_morto=Image(Point(900,100),'imgs/coracao_inimigo.png')        #sprite do coração morto
+    coracao = Image(Point(150, 100), "imgs/coracao_aliado.png")                   #sprite do coração aliado                   
+    prisco_face=Image(Point(245,725),'imgs/prisco_face.png')                      #rosto do mestre prisco
+
+    #CONSTRUÇÃO DAS CAIXAS DE DIALOGO, ICONES DE INTERFACE E VARIAVEIS DE HP
+
+    caixa_dialogo2=Rectangle(Point(320,650),(Point(740,800)))                     #caixa de dialogo
+    caixa_dialogo2.setFill('black')                                               #cor da caixa
+    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!\n Aperte 1 para ataque normal, e 2 para ataque especial \n você só pode usar o especial uma vez por batalha.")
+    texto_batalha.setFill("white")                                                #cor do texto dentro dela
+    HP = Text(Point(905, 100), f"{inimigo_1['vida']}")                            #variavel de hp do inimigo que será utilizada na tela
+    HP.setFill("White")                                                           #setando a cor do texto da variavel
+    HP.setSize(20)                                                                #o tamanho
+    HP_personagem = Text(Point(155, 100), f"{player['vida_atual']}")              #variavel da vida do player que sera utilizada na tela
+    HP_personagem.setFill("White")                                                #cor do texto da variavel
+    HP_personagem.setSize(20)                                                     #tamanho
+    efeito_dano=Image(Point(600,500),'imgs/efeito_dano.png')                      #sprite de dano acionado quando ataca o inimigo
+    ataque_icon = Image(Point(230,100),'imgs/Attack.png')                         #icone de ataque na interface
+    ataque_icon_ativo=Image(Point(230,100),'imgs/Attack_ativo.png')               #icone de ataque ativado quando o jogador aperta a tecla
+    power_icon_ativado=Image(Point(290,100),'imgs/Power_ativado.png')             #icone de ataque forte ativado quando o jogador aperta a tecla
+    power_icon= Image(Point(290,100),'imgs/Power.png')                            #icone de ataque power na interface
+
+    #DESENHO DAS VARIAVEIS NA TELA
+
+    background3.draw(win)                                                         
+    coracao_inimigo_vivo.draw(win)                                               
+    HP_personagem.draw(win)
+    monstro_neutro.draw(win)                                                        
+    coracao.draw(win)                                       #DESENHA TODAS AS VARIAVEIS DO BLOCO ACIMA
+    prisco_face.draw(win)                                                           
+    HP.draw(win)                                                                
     ataque_icon.draw(win)
     power_icon.draw(win)
+    caixa_dialogo2.draw(win)
+    texto_batalha.draw(win)
+    personagem_batalha.draw(win)  
+    
+    # INICIALIZAÇÃO DO COMBATE                                                  #spawn do personagem
+    win.getMouse()                                                                  #aguarda o click do mouse
+    texto_batalha.undraw()
+    caixa_dialogo2.undraw()        #é apagado os sprites anteriores para o inicio da batalha.
+    prisco_face.undraw()                                         
     especial_count=1                                                            #contador de especial durante a batalha
-    efeito_dano=Image(Point(600,500),'imgs/efeito_dano.png')                    #declaramos variaveis de imagens que irão aparecer
-    monstro_dano=Image(Point(750,500),'imgs/monstro_sofrendo.png')
     while player["vida_atual"]>0 or inimigo_1["vida"]>0:                        #loop para batalha
         tecla=win.getKey()
         turno_player=True
+        #condição se o jogador utiliza a primeira skill de luta
         if tecla == '1' and turno_player== True:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
@@ -330,18 +341,19 @@ def fase_jogo3(win, player, inimigo_1):
             personagem_batalha2.draw(win)                                       #sprite de ataque do personagem aparece
             efeito_dano.draw(win)                                               #efeito de ataque   
             monstro_neutro.undraw()                                             #sprite monstro neutro some
-            monstro_dano.draw(win)                                              #monstro sofre o dano com o sprite aparecendo
+            monstro_sofrendo.draw(win)                                              #monstro sofre o dano com o sprite aparecendo
             time.sleep(0.7)                                                     #pequeno delay 
-            monstro_dano.undraw()                                               #sprite do monstro desaparece
-            inimigo_1['vida'] = inimigo_1['vida'] - player['dano']              #recebe a variavel de dano
+            monstro_sofrendo.undraw()                                               #sprite do monstro desaparece
+            inimigo_1['vida'] = inimigo_1['vida'] - player['dano']                          #recebe a variavel de dano
+        #condição se o jogador aperta o super poder
         if tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             monstro_neutro.undraw()
             personagem_batalha.undraw()                                         #código para o super especial
             power_icon_ativado.draw(win)
             personagem_batalha2.draw(win)
-            monstro_dano.draw(win)
+            monstro_sofrendo.draw(win)
             time.sleep(0.9)
-            monstro_dano.undraw()
+            monstro_sofrendo.undraw()
             power_icon_ativado.undraw()
             inimigo_1["vida"] = inimigo_1['vida'] - player['dano especial']
             HP.undraw()
@@ -351,6 +363,8 @@ def fase_jogo3(win, player, inimigo_1):
             HP.draw(win)
             player["vida_atual"]= player["vida_atual"]-inimigo_1["dano"]
             especial_count -=1
+        #condição se o inimigo morre
+
         if inimigo_1["vida"] <= 0:
             coracao_inimigo_vivo.undraw()
             coracao_inimigo_morto.draw(win)
@@ -426,11 +440,20 @@ def fase_jogo4 (win,player,cobra):
     background4=Image(Point(540,400),"imgs/background4.png")                           #construção da interface e cenário
     cobraimg=Image(Point(750,500),'imgs/cobra.png')
     personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")          
+    personagem_batalha2=Image(Point(500,500),"imgs/personage_combate_2.png")
+    personagem_batalha3=Image(Point(500,500),"imgs/personagem_ataque_espada.png")
+    personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')
+    personagem_morto=Image(Point(150,500),'imgs/personagem_morto.png')
+    personagem_morto2=Image(Point(150,500),'imgs/personagem_morto2.png')
     prisco_face=Image(Point(245,725),'imgs/prisco_face.png')
+    cobra_ataque=Image(Point(400,500),'imgs/cobra_ataque.png')
+    cobra_dano=Image(Point(750,500),'imgs/cobra_dano.png')
+    cobra_morrendo=Image(Point(300,500),'imgs/cobra_morrendo.png')
+    cobra_morrendo2=Image(Point(300,500),'imgs/cobra_morrendo2.png')
+
 
     #declara os icones como barras de HP aliada e inimiga, as caixas de dialogo e o texto da batalha
 
-    personagem_batalha2=Image(Point(500,500),"imgs/personage_combate_2.png")
     ataque_icon = Image(Point(230,100),'imgs/Attack.png')
     ataque_icon_ativo=Image(Point(230,100),'imgs/Attack_ativo.png')                     #desenha os icones
     power_icon_ativado=Image(Point(290,100),'imgs/Power_ativado.png')
@@ -461,12 +484,102 @@ def fase_jogo4 (win,player,cobra):
     HP_personagem.draw(win)
     coracao_inimigo_vivo.draw(win)
     coracao.draw(win)
-    win.getMouse()
-    while player['vida_max'] >0 or cobra['vida_max'] >0:
+    ataque_icon.draw(win)
+    power_icon.draw(win)
+    # define o que vai sumir antes de começar a batalha.
+    win.getMouse()           
+    prisco_face.undraw()
+    texto_batalha.undraw()
+    caixa_dialogo2.undraw()
+    while player['vida_atual'] >0 or cobra['vida_max'] >0:
         tecla=win.getKey()
-        if tecla == '1':
-            
-            
+        if tecla == '1' and player['vida_atual']> 0:                                #jogador ataca
+            ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
+            time.sleep(0.9)                                                     #delay até ela desaparecer
+            ataque_icon_ativo.undraw()                                          #ela desaparece
+            personagem_batalha.undraw()                                         #sprite de personagem neutro desaparece
+            personagem_batalha3.draw(win)                                       #sprite de ataque do personagem aparece                                               #efeito de ataque   
+            cobraimg.undraw()                                             #sprite monstro neutro some
+            cobra_dano.draw(win)                                              #monstro sofre o dano com o sprite aparecendo
+            time.sleep(0.7)                                                     #pequeno delay 
+            cobra_dano.undraw()                                               #sprite do monstro desaparece
+            cobra['vida_max'] = cobra['vida_max'] - player['dano']                          #recebe a variavel de dano
+        if tecla == '2' and player['vida_atual']>0:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
+            cobraimg.undraw()
+            personagem_batalha.undraw()                                         #código para o super especial
+            power_icon_ativado.draw(win)
+            personagem_batalha3.draw(win)
+            cobra_dano.draw(win)
+            time.sleep(0.9)
+            cobra_dano.undraw()
+            power_icon_ativado.undraw()
+            cobra["vida_max"] = cobra['vida_max'] - player['dano especial']
+            HP.undraw()
+            HP = Text(Point(905, 100), f"{cobra['vida_max']}")
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)
+            player["vida_atual"]= player["vida_atual"]-cobra["dano"]
+        if player['vida_atual'] <= 0:
+            player["vida_atual"]= player["vida_atual"]-cobra["dano"]
+            personagem_sofrendo.undraw()
+            personagem_batalha3.undraw()
+            personagem_morto.draw(win)
+            #cobraimg.draw(win)
+            time.sleep(0.7)
+            personagem_morto.undraw()
+            personagem_morto2.draw(win)
+            break
+        if cobra["vida_max"] <= 0:
+            coracao_inimigo_vivo.undraw()
+            coracao_inimigo_morto.draw(win)
+            HP.undraw()                                                        #aqui o hp é atualizado, 
+            HP=Text(Point(905,100),f'{cobra['vida_max']}')                     #do inimigo
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)                                                        #faz a verificação mais importante, se for menor que zero, o monstro morre e a batalha nao continua
+            cobraimg.undraw()                                                   #animação de morte do monstro                                           
+            cobra_morrendo=Image(Point(750,500),'imgs/cobra_morrendo.png')        #mais declarações de variaveis de imagens
+            cobra_morrendo2=Image(Point(750,500),'imgs/cobra_morrendo2.png')
+            cobra_morrendo.draw(win)                                             #sprite do monstro morrendo
+            time.sleep(0.8)                                                     #delay antes dele fechar os olhos e morrer
+            cobra_morrendo.undraw()
+            cobra_morrendo2.draw(win)
+            time.sleep(0.2)
+            personagem_batalha3.undraw()
+            personagem_batalha.draw(win)
+            break
+        else:                                                               #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
+            cobraimg.draw(win)                                        #monstro volta a ser neutro
+            HP.undraw()                                                     #aqui o hp é atualizado, 
+            HP=Text(Point(905,100),f'{cobra['vida_max']}')                  #do inimigo
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)
+            print(cobra['vida_max'])                                        #printa na tela
+            time.sleep(0.3) #delay para animação                                    
+            personagem_batalha3.undraw()
+            personagem_batalha.draw(win)                                    
+            time.sleep(0.7)                                                 #delay antes do monstro atacar
+            cobraimg.undraw()
+            cobra_ataque.draw(win)                                        #monstro ataca
+            personagem_batalha.undraw()
+            personagem_sofrendo.draw(win)                                   #personagem recebe dano
+            time.sleep(0.9)                                                 #delay para animação de dano do monstro
+            cobra_ataque.undraw()
+            cobraimg.draw(win)
+            personagem_sofrendo.undraw()
+            personagem_batalha.draw(win)
+            time.sleep(0.2)                                         
+            player["vida_atual"]= player["vida_atual"]-cobra["dano"]       #aqui fica a impressão do dano logo após o personagem executar
+            HP_personagem.undraw()                                             #uma ação
+            HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+            HP_personagem.setFill("White")
+            HP_personagem.setSize(20)
+            HP_personagem.draw(win)        
+        if cobra["vida_max"] <=0 or player["vida_atual"] <= 0:
+            break
+    win.getMouse()
 
 
 def main ():
@@ -492,17 +605,11 @@ def main ():
         "vida_max":300,
     }
     cobra = {
-        "dano":15,
+        "dano":40,
         "vida_max":500
     }
-    prisco = {
-        "dano":20,
-        "vida_max":300,
-    }
-    cobra = {
-        "dano":15,
-        "vida_max":500
-    }
+   
+    
 
     # ATENÇAO PRA NAO CHAMAR DUAS VZS
     if telas == "fase1":
