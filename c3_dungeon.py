@@ -28,7 +28,7 @@ listasprite_dir = [
     "imgs/sprite_personagem/sprite5.png",
 ]
 
-# VARIAVEIS GLOBAIS
+# VARIAVEIS GLOBAIS !!
 
 inventarior = {"pocao_de_vida": 3, "espada": 1}
 
@@ -70,42 +70,106 @@ def menu(win):
             return "fase1"
 
 
-def inventario(win):  # funçao apenas da janela, criar outra funçao pra armazenar os itens
-    win_inv = GraphWin("Inventário", 400, 400)
+def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra armazenar os itens
+    win_inv = GraphWin("Inventário", 400, 450)
     win_inv.setBackground("grey")
+
     y = 50
     titulo = Text(Point(200, 20), "Inventário")
     titulo.setSize(18)
     titulo.setStyle("bold")
     titulo.draw(win_inv)
     
+    botoes_usar = {}
+    
+    for item_id,qnt in inventarior.items():
+        if qnt <= 0:
+            continue
 
-    for item_id, qnt in inventarior.items():
+        if y > 300:
+            Text(Point(200,395), "idk").draw(win_inv)
+            break
+
         info = itens.get(item_id)
+
         if info:
             nome_completo = info['nome']
             descricao = info['desc']
+            tipo = info['tipo']
+            
             retangulo = Rectangle(Point(10, y - 15), Point(390, y + 40))
             retangulo.setFill("white")
+            retangulo.setOutline("gray")
             retangulo.draw(win_inv)
 
-            texto_nome = Text(Point(200, y), f"{nome_completo} (x{qnt})")
+            texto_nome = Text(Point(105, y), f"{nome_completo} (x{qnt})")
             texto_nome.setSize(12)
             texto_nome.setStyle("bold")
             texto_nome.draw(win_inv)
 
-            texto_desc = Text(Point(200, y + 20), descricao)
+            texto_desc = Text(Point(105, y + 20), descricao)
             texto_desc.setSize(10)
             texto_desc.draw(win_inv)
+        
+        if tipo == "Consumível":
+            botao_x1, botao_y1 = 300, y - 10
+            botao_x2, botao_y2 = 380, y + 10
+                
+            botao_usa = Rectangle(Point(botao_x1, botao_y1), Point(botao_x2, botao_y2))
+            botao_usa.setFill("green")
+            botao_usa.setOutline("darkgreen")
+            botao_usa.draw(win_inv)
+                
+            texto_usar = Text(Point(340, y), "Usar")
+            texto_usar.setSize(10)
+            texto_usar.setStyle("bold")
+            texto_usar.setTextColor("white")
+            texto_usar.draw(win_inv)
+                
+            botoes_usar[item_id] = (botao_x1, botao_y1, botao_x2, botao_y2)
+        y += 60
+    botao_x1, botao_y1 = 150, 410
+    botao_x2, botao_y2 = 250, 440
+    
+    botao_fecha = Rectangle(Point(botao_x1, botao_y1), Point(botao_x2, botao_y2))
+    botao_fecha.setFill("red")
+    botao_fecha.setOutline("darkred")
+    botao_fecha.draw(win_inv)
+    
+    texto_fechar = Text(Point(200, 425), "fechar")
+    texto_fechar.setSize(12)
+    texto_fechar.setStyle("bold")
+    texto_fechar.setTextColor("white")
+    texto_fechar.draw(win_inv)
 
-            y += 60
-        if y > 400:
+    while True:
+        p = win_inv.getMouse() 
+
+        if botao_x1 <= p.getX() <= botao_x2 and botao_y1 <= p.getY() <= botao_y2:
             break
-    aviso = Text(Point(200, 380), "Clique para fechar")
-    aviso.draw(win_inv)
-    win_inv.getMouse()
+
+        item_usado = None
+        for item_id, (x1, y1, x2, y2) in botoes_usar.items():
+            if x1 <= p.getX() <= x2 and y1 <= p.getY() <= y2:
+                item_usado = item_id
+                break
+            
+        if item_usado:
+            inventarior[item_usado] -= 1
+            cura = itens[item_usado].get("cura", 0)
+
+            player['vida_atual'] += cura
+            if player['vida_atual'] > player['vida_max']:
+                player['vida_atual'] = player['vida_max']
+            mensagem = f"usou essa merda de item ai: {itens[item_usado]['nome']} e curou {cura}"
+            Text(Point(200, 395), mensagem).draw(win_inv)
+                
+            win_inv.close()
+            inventario(win)
+            return
     win_inv.close()
 
+    
 
 def fase_jogo(win):
 
@@ -256,16 +320,16 @@ def fase_jogo2(win):
         if player_x < 0:
             background_c3.undraw()
             sprite_atual.undraw()
-            novo_x = LARGURA_MAX - 50
-            novo_y = player_y
+            #novo_x = LARGURA_MAX - 50
+            #novo_y = player_y
             return "mapa_city"
         
         elif player_x > LARGURA_MAX:
             background_c3.undraw()
             sprite_atual.undraw()
-            novo_x = 50 
-            novo_y = player_y
-            return ("mapa_outra_floresta", novo_x, novo_y)
+            #novo_x = 50 
+            #novo_y = player_y
+            return ("mapa_outra_floresta", 50, player_y)
 
 #AQUI É AS FUNÇOES DOS MAPAS! 
 
