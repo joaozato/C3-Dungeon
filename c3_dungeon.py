@@ -333,6 +333,8 @@ def fase_jogo3(win, player, inimigo_1):
         tecla=win.getKey()
         turno_player=True
         #condição se o jogador utiliza a primeira skill de luta
+        if tecla=='f':
+            return 'fase4'
         if tecla == '1' and turno_player== True:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
@@ -491,8 +493,10 @@ def fase_jogo4 (win,player,cobra):
     prisco_face.undraw()
     texto_batalha.undraw()
     caixa_dialogo2.undraw()
-    while player['vida_atual'] >0 or cobra['vida_max'] >0:
+    while player['vida_atual'] >0 and cobra['vida_max'] >0:
         tecla=win.getKey()
+        if tecla=='f':
+            return 'fase5'
         if tecla == '1' and player['vida_atual']> 0:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
@@ -520,16 +524,6 @@ def fase_jogo4 (win,player,cobra):
             HP.setSize(20)
             HP.draw(win)
             player["vida_atual"]= player["vida_atual"]-cobra["dano"]
-        if player['vida_atual'] <= 0:
-            player["vida_atual"]= player["vida_atual"]-cobra["dano"]
-            personagem_sofrendo.undraw()
-            personagem_batalha3.undraw()
-            personagem_morto.draw(win)
-            #cobraimg.draw(win)
-            time.sleep(0.7)
-            personagem_morto.undraw()
-            personagem_morto2.draw(win)
-            break
         if cobra["vida_max"] <= 0:
             coracao_inimigo_vivo.undraw()
             coracao_inimigo_morto.draw(win)
@@ -548,39 +542,133 @@ def fase_jogo4 (win,player,cobra):
             time.sleep(0.2)
             personagem_batalha3.undraw()
             personagem_batalha.draw(win)
-            break
-        else:                                                               #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
-            cobraimg.draw(win)                                        #monstro volta a ser neutro
-            HP.undraw()                                                     #aqui o hp é atualizado, 
-            HP=Text(Point(905,100),f'{cobra['vida_max']}')                  #do inimigo
-            HP.setFill("White")
-            HP.setSize(20)
-            HP.draw(win)
-            print(cobra['vida_max'])                                        #printa na tela
-            time.sleep(0.3) #delay para animação                                    
-            personagem_batalha3.undraw()
-            personagem_batalha.draw(win)                                    
-            time.sleep(0.7)                                                 #delay antes do monstro atacar
-            cobraimg.undraw()
-            cobra_ataque.draw(win)                                        #monstro ataca
-            personagem_batalha.undraw()
-            personagem_sofrendo.draw(win)                                   #personagem recebe dano
-            time.sleep(0.9)                                                 #delay para animação de dano do monstro
-            cobra_ataque.undraw()
-            cobraimg.draw(win)
+            win.getMouse()
+            return 'fase5'
+            
+        
+                                                                       #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
+        cobraimg.draw(win)                                        #monstro volta a ser neutro
+        HP.undraw()                                                     #aqui o hp é atualizado, 
+        HP=Text(Point(905,100),f'{cobra['vida_max']}')                  #do inimigo
+        HP.setFill("White")
+        HP.setSize(20)
+        HP.draw(win)
+        print(cobra['vida_max'])                                        #printa na tela
+        time.sleep(0.3) #delay para animação                                    
+        personagem_batalha3.undraw()
+        personagem_batalha.draw(win)                                    
+        time.sleep(0.7)                                                 #delay antes do monstro atacar
+        cobraimg.undraw()
+        cobra_ataque.draw(win)                                        #monstro ataca
+        personagem_batalha.undraw()
+        personagem_sofrendo.draw(win)                                   #personagem recebe dano
+        time.sleep(0.9)                                                 #delay para animação de dano do monstro
+        cobra_ataque.undraw()
+        cobraimg.draw(win)
+        personagem_sofrendo.undraw()
+        personagem_batalha.draw(win)
+        time.sleep(0.2)                                         
+        player["vida_atual"]= player["vida_atual"]-cobra["dano"]       #aqui fica a impressão do dano logo após o personagem executar
+        HP_personagem.undraw()                                             #uma ação
+        HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+        HP_personagem.setFill("White")
+        HP_personagem.setSize(20)
+        HP_personagem.draw(win)        
+        if player['vida_atual'] <= 0:
             personagem_sofrendo.undraw()
-            personagem_batalha.draw(win)
-            time.sleep(0.2)                                         
-            player["vida_atual"]= player["vida_atual"]-cobra["dano"]       #aqui fica a impressão do dano logo após o personagem executar
-            HP_personagem.undraw()                                             #uma ação
-            HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
-            HP_personagem.setFill("White")
-            HP_personagem.setSize(20)
-            HP_personagem.draw(win)        
-        if cobra["vida_max"] <=0 or player["vida_atual"] <= 0:
-            break
+            personagem_batalha3.undraw()
+            personagem_batalha.undraw()
+            personagem_morto.draw(win)
+            time.sleep(0.7)
+            personagem_morto.undraw()
+            personagem_morto2.draw(win)
+            texto_fim= Text(Point(540,400),'VOCÊ PERDEU \n CLIQUE PARA TENTAR NOVAMENTE')
+            texto_fim.setSize(30)
+            texto_fim.setTextColor('red')
+            texto_fim.setStyle('bold')
+            texto_fim.draw(win)
+            win.getMouse()
+            
+            texto_fim.undraw()
+            personagem_morto2.undraw()
+            background4.undraw()
+            cobraimg.undraw()
+            HP.undraw()
+            HP_personagem.undraw()
+            coracao.undraw()
+            coracao_inimigo_morto.undraw()
+            coracao_inimigo_vivo.undraw()
+            ataque_icon.undraw()
+            power_icon.undraw()
+            player['vida_atual']=100
+            cobra['vida_max']=500
+            return 'fase4'
+    
+def fase_jogo5(win,player,prisco,larissa):
+    #declaração de variaveis de cenário e sprites
+    background_final=Image(Point(540,400),'imgs/batalha_final.png')
+    evil_prisco=Image(Point(750,500),'imgs/evil_prisco.png')
+    personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")          
+    personagem_batalha2=Image(Point(500,500),"imgs/personage_combate_2.png")
+    personagem_batalha3=Image(Point(500,500),"imgs/personagem_ataque_espada.png")
+    personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')
+    personagem_morto=Image(Point(150,500),'imgs/personagem_morto.png')
+    personagem_morto2=Image(Point(150,500),'imgs/personagem_morto2.png')
+    
+    #Caixas de dialogos
+
+    caixa_dialogo2=Rectangle(Point(320,650),(Point(740,800)))                     #caixa de dialogo
+    caixa_dialogo2.setFill('black')                                               #cor da caixa
+    texto_batalha=Text(Point(530,725),"Eu lamento muito informar a você \n que eu estou do lado das criaturas algoritmicas\n vocês todos irão reprovar!")
+    texto_batalha.setFill("white")
+    texto_batalha2=Text(Point(530,725),'Não se preocupa estudante!\n to aqui pra te ajudar\n, a larissa do JS vai acabar com o velhote!')    
+    texto_batalha2.setFill("white")
+    prisco_dialogo=Image(Point(230,725),'imgs/evil_prisco_dialogo.png')
+    personagem_assustado=Image(Point(20,725),'imgs/personagem_assustado.png')
+    larissa_dialogo=Image(Point(230,680),'imgs/larissa_dialogo.png')
+    larissa_batalha=Image(Point(280,500),'imgs/larissa_neutra.png')
+    larissa_voando=Image(Point(280,300),'imgs/larissa_voando.png')
+
+
+    #Icones
+    ataque_icon = Image(Point(230,100),'imgs/Attack.png')
+    ataque_icon_ativo=Image(Point(230,100),'imgs/Attack_ativo.png')                     #desenha os icones
+    power_icon_ativado=Image(Point(290,100),'imgs/Power_ativado.png')
+    power_icon= Image(Point(290,100),'imgs/Power.png')                                  #spawn do personagem
+    coracao=Image(Point(150,100),'imgs/coracao_aliado.png')
+    coracao_inimigo_morto=Image(Point(900,100),'imgs/coracao_inimigo.png')
+    coracao_inimigo_vivo=Image(Point(900,100),"imgs/coracao_aliado.png")
+
+    #primeira cena
+    background_final.draw(win)
+    prisco_dialogo.draw(win)
+    caixa_dialogo2.draw(win)
+    texto_batalha.draw(win)
+    evil_prisco.draw(win)
+    personagem_batalha.draw(win)
+
     win.getMouse()
 
+    #segunda cena
+    prisco_dialogo.undraw()
+    texto_batalha.undraw()
+    personagem_assustado.draw(win)
+    texto_batalha2.draw(win)
+    larissa_dialogo.draw(win)
+    win.getMouse()
+    #terceira cena
+    larissa_voando.draw(win)
+    time.sleep(0.5)
+    larissa_voando.undraw()
+    larissa_batalha.draw(win)
+    #quarta cena que leva pra batalha
+    win.getMouse()
+    larissa_dialogo.undraw()
+    caixa_dialogo2.undraw()
+    texto_batalha2.undraw()
+    while player['vida_atual'] >0 and prisco['vida_max']>0:
+        tecla=win.getKey()
+        if tecla == '1':
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
@@ -589,7 +677,7 @@ def main ():
         "nome": "nome_player",
         "vida_max": 100,
         "vida_atual": 100,
-        "dano": 15,
+        "dano": 400,
         "pocao": 2,
         "dano especial":30,
     }
@@ -608,18 +696,24 @@ def main ():
         "dano":40,
         "vida_max":500
     }
+    larissa = {
+        'dano':100,
+        'vida_max':200
+    }
    
-    
+    while True:
 
-    # ATENÇAO PRA NAO CHAMAR DUAS VZS
-    if telas == "fase1":
-        telas = fase_jogo(win)
-    if telas == "fase2":
-        telas = fase_jogo2(win)
-    if telas == "fase3":
-        telas = fase_jogo3(win, player, inimigo_1)
-    if telas == 'fase4':
-       fase_jogo4(win,player,cobra)
+        # ATENÇAO PRA NAO CHAMAR DUAS VZS
+        if telas == "fase1":
+            telas = fase_jogo(win)
+        elif telas == "fase2":
+            telas = fase_jogo2(win)
+        elif telas == "fase3":
+            telas = fase_jogo3(win, player, inimigo_1)
+        elif telas == 'fase4':
+            telas = fase_jogo4(win,player,cobra)
+        elif telas == 'fase5':
+           telas = fase_jogo5(win,player,prisco,larissa)
     
 
 
