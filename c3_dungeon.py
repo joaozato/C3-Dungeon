@@ -608,12 +608,19 @@ def fase_jogo5(win,player,prisco,larissa):
     #declaração de variaveis de cenário e sprites
     background_final=Image(Point(540,400),'imgs/batalha_final.png')
     evil_prisco=Image(Point(750,500),'imgs/evil_prisco.png')
+    evil_prisco_ataque=Image(Point(750,500),'imgs/evil_prisco_attack.png')
+    evil_prisco_morte=Image(Point(750,500),'imgs/evil_prisco_fraco.png')
+    evil_prisco_morte2=Image(Point(750,500),'imgs/evil_prisco_morto.png')
+    evil_prisco_dano=Image(Point(750,500),'imgs/prisco_dano.png')
     personagem_batalha=Image(Point(150,500),"imgs/personagem_combate.png")          
     personagem_batalha2=Image(Point(500,500),"imgs/personage_combate_2.png")
     personagem_batalha3=Image(Point(500,500),"imgs/personagem_ataque_espada.png")
     personagem_sofrendo=Image(Point(150,500),'imgs/personagem_sofrendo.png')
     personagem_morto=Image(Point(150,500),'imgs/personagem_morto.png')
     personagem_morto2=Image(Point(150,500),'imgs/personagem_morto2.png')
+    larissa_ataque=Image(Point(890,500),'imgs/larissa_ataque.png')
+    larissa_super=Image(Point(890,500),'imgs/larissa_super.png')
+    larissa_dano=Image(Point(280,500),'imgs/larissa_dano.png')
     
     #Caixas de dialogos
 
@@ -628,6 +635,7 @@ def fase_jogo5(win,player,prisco,larissa):
     larissa_dialogo=Image(Point(230,680),'imgs/larissa_dialogo.png')
     larissa_batalha=Image(Point(280,500),'imgs/larissa_neutra.png')
     larissa_voando=Image(Point(280,300),'imgs/larissa_voando.png')
+    
 
 
     #Icones
@@ -638,6 +646,12 @@ def fase_jogo5(win,player,prisco,larissa):
     coracao=Image(Point(150,100),'imgs/coracao_aliado.png')
     coracao_inimigo_morto=Image(Point(900,100),'imgs/coracao_inimigo.png')
     coracao_inimigo_vivo=Image(Point(900,100),"imgs/coracao_aliado.png")
+    HP=Text(Point(905,100),f'{prisco['vida_max']}')
+    HP.setFill("White")
+    HP.setSize(20)
+    HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+    HP_personagem.setFill("White")
+    HP_personagem.setSize(20)
 
     #primeira cena
     background_final.draw(win)
@@ -666,10 +680,129 @@ def fase_jogo5(win,player,prisco,larissa):
     larissa_dialogo.undraw()
     caixa_dialogo2.undraw()
     texto_batalha2.undraw()
+    HP.draw(win)                                                                #desenha os hps
+    HP_personagem.draw(win)
+    coracao_inimigo_vivo.draw(win)
+    coracao.draw(win)
+    ataque_icon.draw(win)
+    power_icon.draw(win)
+
     while player['vida_atual'] >0 and prisco['vida_max']>0:
         tecla=win.getKey()
-        if tecla == '1':
+        if tecla == '1' and player['vida_atual']> 0:                                #jogador ataca
+            ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
+            time.sleep(0.9)                                                     #delay até ela desaparecer
+            ataque_icon_ativo.undraw()                                          #ela desaparece
+            personagem_batalha.undraw()  
+            larissa_batalha.undraw()                                       #sprite de personagem neutro desaparece
+            personagem_batalha3.draw(win)                       
+            larissa_ataque.draw(win)                #sprite de ataque do personagem aparece                                               #efeito de ataque   
+            evil_prisco.undraw()                                             #sprite monstro neutro some
+            evil_prisco_dano.draw(win)                                              #monstro sofre o dano com o sprite aparecendo
+            time.sleep(0.7)           
+            larissa_ataque.undraw()                                         #pequeno delay 
+            evil_prisco_dano.undraw()
+            larissa_batalha.draw(win)
+            prisco['vida_max'] = prisco['vida_max'] - player['dano']
+            prisco['vida_max'] = prisco['vida_max'] - larissa['dano']      
+        if tecla == '2' and player['vida_atual']>0:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
+            evil_prisco.undraw()
+            personagem_batalha.undraw()
+            larissa_batalha.undraw()                                         #código para o super especial
+            power_icon_ativado.draw(win)
+            personagem_batalha3.draw(win)
+            larissa_super.draw(win)
+            evil_prisco_ataque.draw(win)
+            time.sleep(0.9)
+            evil_prisco_ataque.undraw()
+            power_icon_ativado.undraw()
+            larissa_super.undraw()
+            larissa_batalha.draw(win)
+            prisco["vida_max"] = prisco['vida_max'] - player['dano especial']
+            HP.undraw()
+            HP = Text(Point(905, 100), f"{prisco['vida_max']}")
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)
+            player["vida_atual"]= player["vida_atual"]-prisco["dano"]
+        if prisco["vida_max"] <= 0:
+            coracao_inimigo_vivo.undraw()
+            coracao_inimigo_morto.draw(win)
+            HP.undraw()                                                        #aqui o hp é atualizado, 
+            HP=Text(Point(905,100),f'{prisco['vida_max']}')                     #do inimigo
+            HP.setFill("White")
+            HP.setSize(20)
+            HP.draw(win)                                                        #faz a verificação mais importante, se for menor que zero, o monstro morre e a batalha nao continua
+            evil_prisco.undraw()                                                   #animação de morte do monstro                                           
+            evil_prisco_morte.draw(win)                                             #sprite do monstro morrendo
+            time.sleep(0.8)                                                     #delay antes dele fechar os olhos e morrer
+            evil_prisco_morte.undraw()
+            evil_prisco_morte2.draw(win)
+            time.sleep(0.2)
+            personagem_batalha3.undraw()
+            personagem_batalha.draw(win)
+            win.getMouse()
 
+        evil_prisco.draw(win)                                        #monstro volta a ser neutro
+        HP.undraw()                                                     #aqui o hp é atualizado, 
+        HP=Text(Point(905,100),f'{prisco['vida_max']}')                  #do inimigo
+        HP.setFill("White")
+        HP.setSize(20)
+        HP.draw(win)
+        print(prisco['vida_max'])                                        #printa na tela
+        time.sleep(0.3) #delay para animação                                    
+        personagem_batalha3.undraw()
+        personagem_batalha.draw(win)                                    
+        time.sleep(0.7)                                                 #delay antes do monstro atacar
+        evil_prisco.undraw()
+        evil_prisco_ataque.draw(win)                                        #monstro ataca
+        personagem_batalha.undraw()
+        larissa_batalha.undraw()
+        personagem_sofrendo.draw(win)
+        larissa_dano.draw(win)                                   #personagem recebe dano
+        time.sleep(0.9)                                                 #delay para animação de dano do monstro
+        evil_prisco_ataque.undraw()
+        evil_prisco.draw(win)   
+        personagem_sofrendo.undraw()
+        larissa_dano.undraw()
+        personagem_batalha.draw(win)
+        larissa_batalha.draw(win)
+        time.sleep(0.2)                                         
+        player["vida_atual"]= player["vida_atual"]-prisco["dano"]       #aqui fica a impressão do dano logo após o personagem executar
+        HP_personagem.undraw()                                             #uma ação
+        HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+        HP_personagem.setFill("White")
+        HP_personagem.setSize(20)
+        HP_personagem.draw(win)        
+        if player['vida_atual'] <= 0:
+            personagem_sofrendo.undraw()
+            personagem_batalha3.undraw()
+            personagem_batalha.undraw()
+            personagem_morto.draw(win)
+            time.sleep(0.7)
+            personagem_morto.undraw()
+            personagem_morto2.draw(win)
+            texto_fim= Text(Point(540,400),'VOCÊ PERDEU \n CLIQUE PARA TENTAR NOVAMENTE')
+            texto_fim.setSize(30)
+            texto_fim.setTextColor('red')
+            texto_fim.setStyle('bold')
+            texto_fim.draw(win)
+            win.getMouse()
+            
+            texto_fim.undraw()
+            personagem_morto2.undraw()
+            background_final.undraw()
+            evil_prisco.undraw()
+            HP.undraw()
+            HP_personagem.undraw()
+            coracao.undraw()
+            coracao_inimigo_morto.undraw()
+            coracao_inimigo_vivo.undraw()
+            ataque_icon.undraw()
+            power_icon.undraw()
+            player['vida_atual']=100
+            prisco['vida_max']=3000
+            return 'fase5'
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
@@ -690,7 +823,7 @@ def main ():
     }
     prisco = {
         "dano":20,
-        "vida_max":300,
+        "vida_max":3000,
     }
     cobra = {
         "dano":40,
