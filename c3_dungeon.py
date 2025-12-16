@@ -386,6 +386,11 @@ def fase_jogo3(win, player, inimigo_1):
             time.sleep(0.2)
             personagem_batalha2.undraw()
             personagem_batalha.draw(win)
+
+
+        #aqui usamos um ELSE porquê é impossivel do jogador morrer para esse inimigo, ele é a batalha mais fácil. 
+
+
         else:                                                               #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
             monstro_neutro.draw(win)                                        #monstro volta a ser neutro
             HP.undraw()                                                     #aqui o hp é atualizado, 
@@ -417,17 +422,18 @@ def fase_jogo3(win, player, inimigo_1):
             HP_personagem.draw(win)                                            #hp do personagem aparece na tela atualizado
         if inimigo_1["vida"] <=0 or player["vida_atual"] <= 0:
             break
+    #aqui serão 'des'desenhadas as coisas do cenário quando o jogador clicar com o mouse
     win.getMouse()
     background3.undraw()
     personagem_batalha.undraw()
-    monstro_neutro.undraw()
+    monstro_neutro.undraw() 
     HP.undraw()
     HP_personagem.undraw()
     coracao.undraw()
     coracao_inimigo_vivo.undraw()
     ataque_icon.undraw()
     power_icon.undraw()
-    return 'fase4'            
+    return 'fase4'             #levando a fase 4
 '''
 No geral dentro da função 3, ocorre um loop que define toda a batalha, com loops de animações, já que o jogo funciona
 em turnos, o que acontece é a aparição das animações, com os delays setados para dar a impressão de movimento, e
@@ -488,6 +494,7 @@ def fase_jogo4 (win,player,cobra):
     coracao.draw(win)
     ataque_icon.draw(win)
     power_icon.draw(win)
+
     # define o que vai sumir antes de começar a batalha.
     win.getMouse()           
     prisco_face.undraw()
@@ -495,20 +502,23 @@ def fase_jogo4 (win,player,cobra):
     caixa_dialogo2.undraw()
     while player['vida_atual'] >0 and cobra['vida_max'] >0:
         tecla=win.getKey()
+        #botao de atalho de teste para ir para a próxima fase, o jogador não deve apertar
         if tecla=='f':
             return 'fase5'
-        if tecla == '1' and player['vida_atual']> 0:                                #jogador ataca
+        #ataque comum
+        if tecla == '1' and player['vida_atual']> 0:                            #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
             ataque_icon_ativo.undraw()                                          #ela desaparece
             personagem_batalha.undraw()                                         #sprite de personagem neutro desaparece
             personagem_batalha3.draw(win)                                       #sprite de ataque do personagem aparece                                               #efeito de ataque   
-            cobraimg.undraw()                                             #sprite monstro neutro some
-            cobra_dano.draw(win)                                              #monstro sofre o dano com o sprite aparecendo
+            cobraimg.undraw()                                                   #sprite monstro neutro some
+            cobra_dano.draw(win)                                                #monstro sofre o dano com o sprite aparecendo
             time.sleep(0.7)                                                     #pequeno delay 
-            cobra_dano.undraw()                                               #sprite do monstro desaparece
-            cobra['vida_max'] = cobra['vida_max'] - player['dano']                          #recebe a variavel de dano
-        if tecla == '2' and player['vida_atual']>0:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
+            cobra_dano.undraw()                                                 #sprite do monstro desaparece
+            cobra['vida_max'] = cobra['vida_max'] - player['dano']              #recebe a variavel de dano
+            #aqui fazemos o loop do poder 2, o mais forte do personagem
+        if tecla == '2' and player['vida_atual']>0:                             # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             cobraimg.undraw()
             personagem_batalha.undraw()                                         #código para o super especial
             power_icon_ativado.draw(win)
@@ -524,6 +534,8 @@ def fase_jogo4 (win,player,cobra):
             HP.setSize(20)
             HP.draw(win)
             player["vida_atual"]= player["vida_atual"]-cobra["dano"]
+        
+        #verificação da vida maxima do oponente      
         if cobra["vida_max"] <= 0:
             coracao_inimigo_vivo.undraw()
             coracao_inimigo_morto.draw(win)
@@ -543,23 +555,23 @@ def fase_jogo4 (win,player,cobra):
             personagem_batalha3.undraw()
             personagem_batalha.draw(win)
             win.getMouse()
-            return 'fase5'
+            return 'fase5'  #caso o jogador o mate, retornamos para a proxima fase
             
         
-                                                                       #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
-        cobraimg.draw(win)                                        #monstro volta a ser neutro
+        #batalha continua caso o jogador não mate a cobra ou nao seja morto                                                             
+        cobraimg.draw(win)                                              #monstro volta a ser neutro
         HP.undraw()                                                     #aqui o hp é atualizado, 
         HP=Text(Point(905,100),f'{cobra['vida_max']}')                  #do inimigo
         HP.setFill("White")
         HP.setSize(20)
         HP.draw(win)
         print(cobra['vida_max'])                                        #printa na tela
-        time.sleep(0.3) #delay para animação                                    
+        time.sleep(0.3)                                                 #delay para animação                                    
         personagem_batalha3.undraw()
         personagem_batalha.draw(win)                                    
         time.sleep(0.7)                                                 #delay antes do monstro atacar
         cobraimg.undraw()
-        cobra_ataque.draw(win)                                        #monstro ataca
+        cobra_ataque.draw(win)                                          #monstro ataca
         personagem_batalha.undraw()
         personagem_sofrendo.draw(win)                                   #personagem recebe dano
         time.sleep(0.9)                                                 #delay para animação de dano do monstro
@@ -573,7 +585,9 @@ def fase_jogo4 (win,player,cobra):
         HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
         HP_personagem.setFill("White")
         HP_personagem.setSize(20)
-        HP_personagem.draw(win)        
+        HP_personagem.draw(win)       
+
+        #verificação caso o jogador morra 
         if player['vida_atual'] <= 0:
             personagem_sofrendo.undraw()
             personagem_batalha3.undraw()
@@ -588,7 +602,7 @@ def fase_jogo4 (win,player,cobra):
             texto_fim.setStyle('bold')
             texto_fim.draw(win)
             win.getMouse()
-            
+            #da a opção do jogador clicar na tela para reiniciar, o cenário é resetado e as variáveis também.
             texto_fim.undraw()
             personagem_morto2.undraw()
             background4.undraw()
@@ -653,7 +667,7 @@ def fase_jogo5(win,player,prisco,larissa):
     HP_personagem.setFill("White")
     HP_personagem.setSize(20)
 
-    #primeira cena
+    #primeira cena    com um tom de humor, dialogo do prisco dizendo que está do lado do mal
     background_final.draw(win)
     prisco_dialogo.draw(win)
     caixa_dialogo2.draw(win)
@@ -663,19 +677,23 @@ def fase_jogo5(win,player,prisco,larissa):
 
     win.getMouse()
 
-    #segunda cena
+    #segunda cena            #onde a larissa aparece dizendo que vai te salvar e te ajudar
     prisco_dialogo.undraw()
     texto_batalha.undraw()
     personagem_assustado.draw(win)
     texto_batalha2.draw(win)
     larissa_dialogo.draw(win)
     win.getMouse()
-    #terceira cena
+
+    #terceira cena       #cena da larissa chegando voando 
+    
     larissa_voando.draw(win)
     time.sleep(0.5)
     larissa_voando.undraw()
     larissa_batalha.draw(win)
+
     #quarta cena que leva pra batalha
+
     win.getMouse()
     larissa_dialogo.undraw()
     caixa_dialogo2.undraw()
@@ -803,6 +821,10 @@ def fase_jogo5(win,player,prisco,larissa):
             player['vida_atual']=100
             prisco['vida_max']=3000
             return 'fase5'
+
+    #SEGUE A MESMA LÓGICA DA FASE ANTERIOR, POR ISSO NÃO COLOQUEI TANTAS DESCRIÇÕES    
+    
+
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
