@@ -119,13 +119,12 @@ def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra
             botao_usa.setFill("green")
             botao_usa.setOutline("darkgreen")
             botao_usa.draw(win_inv)
-                
+    
             texto_usar = Text(Point(340, y), "Usar")
             texto_usar.setSize(10)
             texto_usar.setStyle("bold")
             texto_usar.setTextColor("white")
             texto_usar.draw(win_inv)
-                
             botoes_usar[item_id] = (botao_x1, botao_y1, botao_x2, botao_y2)
         y += 60
     botao_x1, botao_y1 = 150, 410
@@ -144,11 +143,10 @@ def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra
 
     while True:
         p = win_inv.getMouse() 
-
         if botao_x1 <= p.getX() <= botao_x2 and botao_y1 <= p.getY() <= botao_y2:
             break
 
-        item_usado = None
+        item_usado = ""
         for item_id, (x1, y1, x2, y2) in botoes_usar.items():
             if x1 <= p.getX() <= x2 and y1 <= p.getY() <= y2:
                 item_usado = item_id
@@ -157,7 +155,6 @@ def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra
         if item_usado:
             inventarior[item_usado] -= 1
             cura = itens[item_usado].get("cura", 0)
-
             player['vida_atual'] += cura
             if player['vida_atual'] > player['vida_max']:
                 player['vida_atual'] = player['vida_max']
