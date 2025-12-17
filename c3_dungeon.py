@@ -33,9 +33,9 @@ player = {
         "nome": "nome_player",
         "vida_max": 100,
         "vida_atual": 100,
-        "dano": 15,
+        "dano": 20,
         "pocao": 2,
-        "dano especial":30,
+        "dano especial":300,
     }
 
 inimigo_1 = {"vida": 50, "dano": 5}
@@ -304,7 +304,7 @@ def fase_jogo2(win,player):  #onde o boneco anda pelo mapa
     LARGURA_MAX = 1080
     ALTURA_MAX = 800
 
-    background_c3 = Image(Point(540, 400), "imgs/fundo2.png")
+    background_c3 = Image(Point(540, 400), "imgs/background.png")
     background_c3.draw(win)
 
     # personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
@@ -363,20 +363,16 @@ def fase_jogo2(win,player):  #onde o boneco anda pelo mapa
             sprite_atual.undraw()
             #novo_x = LARGURA_MAX - 50
             #novo_y = player_y
-            return "fase4"
+            return "fase4"  #andando para a esquerda vai direto para a batalha da cobra python
         
         elif player_x > LARGURA_MAX:
             background_c3.undraw()
             sprite_atual.undraw()
             #novo_x = 50 
             #novo_y = player_y
-            return ("fase3", 50, player_y)
+            return "fase3"#("fase3", 50, player_y) #leva para a batalha contra AED
 
 #AQUI É AS FUNÇOES DOS MAPAS! 
-
-def mapa_city(win,player_x,player_y):
-    LARGURA_MAX = 1080
-    ALTURA_MAX = 800
 
     #AQUI VOU ADD MESMA LOGICA DA FASE 2, SOQ MUDANDO BACKGROUNDS
 
@@ -538,7 +534,7 @@ def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
     coracao_inimigo_vivo.undraw()
     ataque_icon.undraw()
     power_icon.undraw()
-    return 'fase4'             #levando a fase 4
+    return 'fase2'             #levando a fase 4 (agora vai levar ao cenario de transição)
 '''
 No geral dentro da função 3, ocorre um loop que define toda a batalha, com loops de animações, já que o jogo funciona
 em turnos, o que acontece é a aparição das animações, com os delays setados para dar a impressão de movimento, e
@@ -547,7 +543,7 @@ que antes havia um bug que o inimigo mesmo com a vida <0 , acabava te batendo e 
 que caso contrário for falsa, continua a batalha.
 '''
 
-def fase_jogo4 (win,player,cobra):
+def fase_jogo4 (win,player,cobra): # batalha cobra
     #realiza declaração de variaveis que serão usadas
     #aqui são declaradas o cenário, personagem e inimigo.
     background4=Image(Point(540,400),"imgs/background4.png")                           #construção da interface e cenário
