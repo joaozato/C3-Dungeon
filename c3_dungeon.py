@@ -11,7 +11,7 @@ player = {
         "vida_atual": 100,
         "dano": 20,
         "pocao": 2,
-        "dano especial":300,
+        "dano especial":40,
     }
 
 inimigo_1 = {"vida": 50, "dano": 5}
@@ -24,10 +24,10 @@ monstro_neutro = {
     }
 prisco = {
         "dano":20,
-        "vida_max":3000,
+        "vida_max":1000,
     }
 cobra = {
-        "dano":40,
+        "dano":20,
         "vida_max":500
     }
 larissa = {
@@ -35,7 +35,7 @@ larissa = {
         'vida_max':200
     }
 
-inventarior = {"pocao_de_vida": 3, "espada": 1}
+inventarior = {"pocao_de_vida": 10, "espada": 1}
 
 itens = {
     "pocao_de_vida": {
@@ -431,6 +431,12 @@ def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
             return 'fase4'
         if tecla == 'i':
             inventario(win,player)
+            HP_personagem.undraw()
+            HP_personagem = Text(Point(155, 100), f"{player['vida_atual']}")
+            HP_personagem.setFill("White")
+            HP_personagem.setSize(20)
+            HP_personagem.draw(win)
+            continue
         if tecla == '1' and turno_player== True:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
@@ -487,7 +493,7 @@ def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
         #aqui usamos um ELSE porquê é impossivel do jogador morrer para esse inimigo, ele é a batalha mais fácil. 
 
 
-        else:                                                               #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
+        else:                                                              #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
             monstro_neutro.draw(win)                                        #monstro volta a ser neutro
             HP.undraw()                                                     #aqui o hp é atualizado, 
             HP=Text(Point(905,100),f'{inimigo_1['vida']}')                  #do inimigo
@@ -602,6 +608,14 @@ def fase_jogo4 (win,player,cobra): # batalha cobra
         #botao de atalho de teste para ir para a próxima fase, o jogador não deve apertar
         if tecla=='f':
             return 'fase5'
+        if tecla == 'i':
+            inventario(win,player)
+            HP_personagem.undraw()
+            HP_personagem = Text(Point(155, 100), f"{player['vida_atual']}")
+            HP_personagem.setFill("White")
+            HP_personagem.setSize(20)
+            HP_personagem.draw(win)
+            continue
         #ataque comum
         if tecla == '1' and player['vida_atual']> 0:                            #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
@@ -713,6 +727,7 @@ def fase_jogo4 (win,player,cobra): # batalha cobra
             power_icon.undraw()
             player['vida_atual']=100
             cobra['vida_max']=500
+            inventario['pocao_de_vida']=10
             return 'fase4'
         
 def fase_jogo5(win,player,prisco,larissa):
@@ -801,9 +816,18 @@ def fase_jogo5(win,player,prisco,larissa):
     coracao.draw(win)
     ataque_icon.draw(win)
     power_icon.draw(win)
+    personagem_assustado.undraw()
 
     while player['vida_atual'] >0 and prisco['vida_max']>0:
         tecla=win.getKey()
+        if tecla == 'i':
+            inventario(win,player)
+            HP_personagem.undraw()
+            HP_personagem = Text(Point(155, 100), f"{player['vida_atual']}")
+            HP_personagem.setFill("White")
+            HP_personagem.setSize(20)
+            HP_personagem.draw(win)
+            continue
         if tecla == '1' and player['vida_atual']> 0:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
@@ -917,6 +941,7 @@ def fase_jogo5(win,player,prisco,larissa):
             power_icon.undraw()
             player['vida_atual']=100
             prisco['vida_max']=3000
+            inventarior['pocao_de_vida']=10
             return 'fase5'
 
     #SEGUE A MESMA LÓGICA DA FASE ANTERIOR, POR ISSO NÃO COLOQUEI TANTAS DESCRIÇÕES    
