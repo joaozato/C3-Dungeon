@@ -162,13 +162,13 @@ def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra
             Text(Point(200, 395), mensagem).draw(win_inv)
                 
             win_inv.close()
-            inventario(win)
+            inventario(win,player)
             return
     win_inv.close()
 
     
 
-def fase_jogo(win):
+def fase_jogo(win,player):
 
 
     background2 = Image(Point(540, 400), "imgs/floresta2.png")
@@ -246,7 +246,7 @@ def fase_jogo(win):
         mx = click.getX()
         my = click.getY()
         if (x1 <= mx <= x2) and (inv_y1 <= my <= inv_y2):
-            inventario(win)  # pega a funçao
+            inventario(win,player)  # pega a funçao
             # nao ta chamando.
         elif (x1_dialogo <= mx <= x2_dialogo) and (
             y1 <= my <= y2
@@ -255,7 +255,7 @@ def fase_jogo(win):
     return "fase2"
 
 
-def fase_jogo2(win):
+def fase_jogo2(win,player):
 
     LARGURA_MAX = 1080
     ALTURA_MAX = 800
@@ -319,14 +319,14 @@ def fase_jogo2(win):
             sprite_atual.undraw()
             #novo_x = LARGURA_MAX - 50
             #novo_y = player_y
-            return "mapa_city"
+            return "fase4"
         
         elif player_x > LARGURA_MAX:
             background_c3.undraw()
             sprite_atual.undraw()
             #novo_x = 50 
             #novo_y = player_y
-            return ("mapa_outra_floresta", 50, player_y)
+            return ("fase3", 50, player_y)
 
 #AQUI É AS FUNÇOES DOS MAPAS! 
 
@@ -921,9 +921,9 @@ def main ():
 
         # ATENÇAO PRA NAO CHAMAR DUAS VZS
         if telas == "fase1":
-            telas = fase_jogo(win)
+            telas = fase_jogo(win,player)
         elif telas == "fase2":
-            telas = fase_jogo2(win)
+            telas = fase_jogo2(win,player)
         elif telas == "fase3":
             telas = fase_jogo3(win, player, inimigo_1)
         elif telas == 'fase4':
