@@ -121,13 +121,7 @@ def inventario(win,player):
         if qnt <= 0:
             continue
 
-        if y > 320:
-            mensagem = Text(Point(200,350),'idk')
-            mensagem.draw(win)
-            elemento_popup.append(mensagem)
-            break
-
-        info = itens.get(item_id)
+        info = itens.get(item_id) 
 
         if info:
             nome_completo = info['nome']
@@ -136,7 +130,6 @@ def inventario(win,player):
             
             retangulo = Rectangle(Point(60, y - 15), Point(340, y + 40))
             retangulo.setFill("white")
-            retangulo.setOutline("gray")
             retangulo.draw(win)
             elemento_popup.append(retangulo)
 
@@ -157,11 +150,10 @@ def inventario(win,player):
                 
             botao_usa = Rectangle(Point(botao_x1, botao_y1), Point(botao_x2, botao_y2))
             botao_usa.setFill("green")
-            botao_usa.setOutline("darkgreen")
             botao_usa.draw(win)
             elemento_popup.append(botao_usa)
     
-            texto_usar = Text(Point(305, y), "Usar")
+            texto_usar = Text(Point(305, y), "usar")
             texto_usar.setSize(10)
             texto_usar.setStyle("bold")
             texto_usar.setTextColor("white")
@@ -173,8 +165,7 @@ def inventario(win,player):
     botao_x2, botao_y2 = 250, 410
     
     botao_fecha = Rectangle(Point(botao_x1, botao_y1), Point(botao_x2, botao_y2))
-    botao_fecha.setFill("red")
-    botao_fecha.setOutline("darkred")
+    botao_fecha.setFill("pink")
     botao_fecha.draw(win)
     elemento_popup.append(botao_fecha)
     
@@ -202,7 +193,6 @@ def inventario(win,player):
             player['vida_atual'] += cura
             if player['vida_atual'] > player['vida_max']:
                 player['vida_atual'] = player['vida_max']
-            mensagem = f"usou essa merda de item ai: {itens[item_usado]['nome']} e curou {cura}"
             for item in elemento_popup:
                 item.undraw()
             return inventario(win, player)
@@ -234,23 +224,6 @@ def fase_jogo(win,player):
     x1_dialogo = x2 + 20  # x2 onde o retrato termina + 20px de espaço
     x2_dialogo = 1030  # x fixo
 
-    # inventariobotao
-
-    altura = 40
-    margem = 10
-
-    inv_y2 = y1 - margem
-    inv_y1 = inv_y2 - altura
-
-    inventario_button = Rectangle(Point(x1, inv_y1), Point(x2, inv_y2))
-    inventario_button.setFill("orange")
-    inventario_button.draw(win)
-    centrox_inv = (x1 + x2) / 2  # msm coisa
-    centroy_inv = (inv_y1 + inv_y2) / 2  # USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
-    inventario_texto = Text(Point(centrox_inv, centroy_inv), "Inventário")
-    inventario_texto.setSize(20)
-    inventario_texto.draw(win)
-    # cuucucucucucucucuc
 
     caixa_retrato = Rectangle(Point(x1, y1), Point(x2, y2))
     caixa_retrato.draw(win)
@@ -287,10 +260,7 @@ def fase_jogo(win,player):
         click = win.getMouse()
         mx = click.getX()
         my = click.getY()
-        if (x1 <= mx <= x2) and (inv_y1 <= my <= inv_y2):
-            inventario(win, player)  # pega a funçao
-            # nao ta chamando.
-        elif (x1_dialogo <= mx <= x2_dialogo) and (
+        if (x1_dialogo <= mx <= x2_dialogo) and (
             y1 <= my <= y2
         ):  # qnd clica passa o texto
             break
@@ -881,6 +851,7 @@ def fase_jogo5(win,player,prisco,larissa):
             personagem_batalha3.undraw()
             personagem_batalha.draw(win)
             win.getMouse()
+            return 'final'
 
         evil_prisco.draw(win)                                        #monstro volta a ser neutro
         HP.undraw()                                                     #aqui o hp é atualizado, 
@@ -945,6 +916,12 @@ def fase_jogo5(win,player,prisco,larissa):
             return 'fase5'
 
     #SEGUE A MESMA LÓGICA DA FASE ANTERIOR, POR ISSO NÃO COLOQUEI TANTAS DESCRIÇÕES    
+
+def iupi(win):
+    background_parabens=Image(Point(540,400),"imgs/parabens.png")          
+    background_parabens.draw(win)
+    win.getMouse()    
+    return 'final'
     
 
 def main ():
@@ -965,7 +942,8 @@ def main ():
             telas = fase_jogo4(win,player,cobra)
         elif telas == 'fase5':
            telas = fase_jogo5(win,player,prisco,larissa)
-    
+        elif telas == 'final':
+            telas = iupi(win)
 
 
 main()
