@@ -9,9 +9,9 @@ player = {
         "nome": "nome_player",
         "vida_max": 100,
         "vida_atual": 100,
-        "dano": 400,
+        "dano": 20,
         "pocao": 2,
-        "dano especial":30,
+        "dano especial":300,
     }
 
 inimigo_1 = {"vida": 50, "dano": 5}
@@ -212,7 +212,7 @@ def inventario(win,player):
 
     
 
-def fase_jogo(win):
+def fase_jogo(win,player):
 
 
     background2 = Image(Point(540, 400), "imgs/floresta2.png")
@@ -297,12 +297,12 @@ def fase_jogo(win):
     return "fase2"
 
 
-def fase_jogo2(win):
+def fase_jogo2(win,player):  #onde o boneco anda pelo mapa
 
     LARGURA_MAX = 1080
     ALTURA_MAX = 800
 
-    background_c3 = Image(Point(540, 400), "imgs/fundo2.png")
+    background_c3 = Image(Point(540, 400), "imgs/background.png")
     background_c3.draw(win)
 
     # personagem=Image(Point(540,400),"imgs/sprite_personagem/sprite5.png")
@@ -353,24 +353,20 @@ def fase_jogo2(win):
             sprite_atual.undraw()
             #novo_x = LARGURA_MAX - 50
             #novo_y = player_y
-            return "fase3"
+            return "fase4"  #andando para a esquerda vai direto para a batalha da cobra python
         
         elif player_x > LARGURA_MAX:
             background_c3.undraw()
             sprite_atual.undraw()
             #novo_x = 50 
             #novo_y = player_y
-            return "fase4"
+            return "fase3"#("fase3", 50, player_y) #leva para a batalha contra AED
 
 #AQUI É AS FUNÇOES DOS MAPAS! 
 
-def mapa_city(win,player_x,player_y):
-    LARGURA_MAX = 1080
-    ALTURA_MAX = 800
-
     #AQUI VOU ADD MESMA LOGICA DA FASE 2, SOQ MUDANDO BACKGROUNDS
 
-def fase_jogo3(win, player, inimigo_1):
+def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
     #CONSTRUÇÃO DO CENÁRIO, SPRITES DOS PERSONAGENS QUE VÃO SER UTILIZADOS NAS VERIFICAÇÕES NO CENÁRIO INICIAL
 
     background3 = Image(Point(540, 400), "imgs/floresta.png")                     #construção da interface e cenário
@@ -389,7 +385,7 @@ def fase_jogo3(win, player, inimigo_1):
 
     caixa_dialogo2=Rectangle(Point(320,650),(Point(740,800)))                     #caixa de dialogo
     caixa_dialogo2.setFill('black')                                               #cor da caixa
-    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!\n Aperte 1 para ataque normal, e 2 para ataque especial \n você só pode usar o especial uma vez por batalha.")
+    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!\n Aperte 1 para ataque normal, e 2 para ataque especial \n.")
     texto_batalha.setFill("white")                                                #cor do texto dentro dela
     HP = Text(Point(905, 100), f"{inimigo_1['vida']}")                            #variavel de hp do inimigo que será utilizada na tela
     HP.setFill("White")                                                           #setando a cor do texto da variavel
@@ -433,9 +429,9 @@ def fase_jogo3(win, player, inimigo_1):
         #condição se o jogador utiliza a primeira skill de luta
         if tecla=='f':
             return 'fase4'
-        elif tecla == 'i':
+        if tecla == 'i':
             inventario(win,player)
-        elif tecla == '1' and turno_player== True:                                #jogador ataca
+        if tecla == '1' and turno_player== True:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
             ataque_icon_ativo.undraw()                                          #ela desaparece
@@ -448,7 +444,7 @@ def fase_jogo3(win, player, inimigo_1):
             monstro_sofrendo.undraw()                                               #sprite do monstro desaparece
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano']                          #recebe a variavel de dano
         #condição se o jogador aperta o super poder
-        elif tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
+        if tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             monstro_neutro.undraw()
             personagem_batalha.undraw()                                         #código para o super especial
             power_icon_ativado.draw(win)
@@ -467,7 +463,7 @@ def fase_jogo3(win, player, inimigo_1):
             especial_count -=1
         #condição se o inimigo morre
 
-        elif inimigo_1["vida"] <= 0:
+        if inimigo_1["vida"] <= 0:
             coracao_inimigo_vivo.undraw()
             coracao_inimigo_morto.draw(win)
             HP.undraw()                                                        #aqui o hp é atualizado, 
@@ -533,7 +529,7 @@ def fase_jogo3(win, player, inimigo_1):
     coracao_inimigo_vivo.undraw()
     ataque_icon.undraw()
     power_icon.undraw()
-    return 'fase4'             #levando a fase 4
+    return 'fase2'             #levando a fase 4 (agora vai levar ao cenario de transição)
 '''
 No geral dentro da função 3, ocorre um loop que define toda a batalha, com loops de animações, já que o jogo funciona
 em turnos, o que acontece é a aparição das animações, com os delays setados para dar a impressão de movimento, e
@@ -542,7 +538,7 @@ que antes havia um bug que o inimigo mesmo com a vida <0 , acabava te batendo e 
 que caso contrário for falsa, continua a batalha.
 '''
 
-def fase_jogo4 (win,player,cobra):
+def fase_jogo4 (win,player,cobra): # batalha cobra
     #realiza declaração de variaveis que serão usadas
     #aqui são declaradas o cenário, personagem e inimigo.
     background4=Image(Point(540,400),"imgs/background4.png")                           #construção da interface e cenário
@@ -935,9 +931,9 @@ def main ():
 
         # ATENÇAO PRA NAO CHAMAR DUAS VZS
         if telas == "fase1":
-            telas = fase_jogo(win)
+            telas = fase_jogo(win,player)
         elif telas == "fase2":
-            telas = fase_jogo2(win)
+            telas = fase_jogo2(win,player)
         elif telas == "fase3":
             telas = fase_jogo3(win, player, inimigo_1)
         elif telas == 'fase4':
