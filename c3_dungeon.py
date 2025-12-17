@@ -24,14 +24,14 @@ monstro_neutro = {
     }
 prisco = {
         "dano":20,
-        "vida_max":1000,
+        "vida_max":300,
     }
 cobra = {
         "dano":20,
-        "vida_max":500
+        "vida_max":200
     }
 larissa = {
-        'dano':100,
+        'dano':25,
         'vida_max':200
     }
 
@@ -636,6 +636,7 @@ def fase_jogo4 (win,player,cobra): # batalha cobra
             personagem_batalha3.undraw()
             personagem_batalha.draw(win)
             win.getMouse()
+            player['vida_atual']=100
             return 'fase5'  #caso o jogador o mate, retornamos para a proxima fase
             
         
@@ -696,8 +697,8 @@ def fase_jogo4 (win,player,cobra): # batalha cobra
             ataque_icon.undraw()
             power_icon.undraw()
             player['vida_atual']=100
-            cobra['vida_max']=500
-            inventario['pocao_de_vida']=10
+            cobra['vida_max']=300
+            inventarior['pocao_de_vida']=10
             return 'fase4'
         
 def fase_jogo5(win,player,prisco,larissa):
@@ -828,6 +829,7 @@ def fase_jogo5(win,player,prisco,larissa):
             larissa_super.undraw()
             larissa_batalha.draw(win)
             prisco["vida_max"] = prisco['vida_max'] - player['dano especial']
+            #prisco['vida_max'] = prisco['vida_max'] - larissa['dano'] 
             HP.undraw()
             HP = Text(Point(905, 100), f"{prisco['vida_max']}")
             HP.setFill("White")
@@ -911,7 +913,7 @@ def fase_jogo5(win,player,prisco,larissa):
             ataque_icon.undraw()
             power_icon.undraw()
             player['vida_atual']=100
-            prisco['vida_max']=3000
+            prisco['vida_max']=600
             inventarior['pocao_de_vida']=10
             return 'fase5'
 
