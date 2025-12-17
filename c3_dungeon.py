@@ -203,6 +203,7 @@ def inventario(win,player):
             if player['vida_atual'] > player['vida_max']:
                 player['vida_atual'] = player['vida_max']
             mensagem = f"usou essa merda de item ai: {itens[item_usado]['nome']} e curou {cura}"
+
             for item in elemento_popup:
                 item.undraw()
             return inventario(win, player)
@@ -234,23 +235,6 @@ def fase_jogo(win,player):
     x1_dialogo = x2 + 20  # x2 onde o retrato termina + 20px de espaço
     x2_dialogo = 1030  # x fixo
 
-    # inventariobotao
-
-    altura = 40
-    margem = 10
-
-    inv_y2 = y1 - margem
-    inv_y1 = inv_y2 - altura
-
-    inventario_button = Rectangle(Point(x1, inv_y1), Point(x2, inv_y2))
-    inventario_button.setFill("orange")
-    inventario_button.draw(win)
-    centrox_inv = (x1 + x2) / 2  # msm coisa
-    centroy_inv = (inv_y1 + inv_y2) / 2  # USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
-    inventario_texto = Text(Point(centrox_inv, centroy_inv), "Inventário")
-    inventario_texto.setSize(20)
-    inventario_texto.draw(win)
-    # cuucucucucucucucuc
 
     caixa_retrato = Rectangle(Point(x1, y1), Point(x2, y2))
     caixa_retrato.draw(win)
@@ -287,10 +271,7 @@ def fase_jogo(win,player):
         click = win.getMouse()
         mx = click.getX()
         my = click.getY()
-        if (x1 <= mx <= x2) and (inv_y1 <= my <= inv_y2):
-            inventario(win, player)  # pega a funçao
-            # nao ta chamando.
-        elif (x1_dialogo <= mx <= x2_dialogo) and (
+        if (x1_dialogo <= mx <= x2_dialogo) and (
             y1 <= my <= y2
         ):  # qnd clica passa o texto
             break
@@ -431,6 +412,13 @@ def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
             return 'fase4'
         if tecla == 'i':
             inventario(win,player)
+            HP_personagem.undraw()
+            HP_personagem = Text(Point(155, 100), f"{player['vida_atual']}")              #variavel da vida do player que sera utilizada na tela
+            HP_personagem.setFill("White")                                                #cor do texto da variavel
+            HP_personagem.setSize(20) 
+            #monstro_neutro.undraw()
+            #personagem_batalha.undraw()
+            continue
         if tecla == '1' and turno_player== True:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
@@ -441,12 +429,15 @@ def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
             monstro_neutro.undraw()                                             #sprite monstro neutro some
             monstro_sofrendo.draw(win)                                              #monstro sofre o dano com o sprite aparecendo
             time.sleep(0.7)                                                     #pequeno delay 
-            monstro_sofrendo.undraw()                                               #sprite do monstro desaparece
+            monstro_sofrendo.undraw() 
+            personagem_batalha2.undraw()
+            monstro_neutro.draw(win)
+            personagem_batalha.draw(win)                                                #sprite do monstro desaparece
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano']                          #recebe a variavel de dano
         #condição se o jogador aperta o super poder
         if tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             monstro_neutro.undraw()
-            personagem_batalha.undraw()                                         #código para o super especial
+            personagem_batalha.undraw()                                       #código para o super especial
             power_icon_ativado.draw(win)
             personagem_batalha2.draw(win)
             monstro_sofrendo.draw(win)
@@ -482,46 +473,42 @@ def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
             time.sleep(0.2)
             personagem_batalha2.undraw()
             personagem_batalha.draw(win)
-
-
         #aqui usamos um ELSE porquê é impossivel do jogador morrer para esse inimigo, ele é a batalha mais fácil. 
-
-
-        else:                                                               #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA
-            monstro_neutro.draw(win)                                        #monstro volta a ser neutro
-            HP.undraw()                                                     #aqui o hp é atualizado, 
-            HP=Text(Point(905,100),f'{inimigo_1['vida']}')                  #do inimigo
-            HP.setFill("White")
-            HP.setSize(20)
-            HP.draw(win)
-            print(inimigo_1['vida'])                                        #printa na tela
-            time.sleep(0.3) #delay para animação             
-            efeito_dano.undraw()                        
-            personagem_batalha2.undraw()
-            personagem_batalha.draw(win)                                    
-            time.sleep(0.7)                                                 #delay antes do monstro atacar
-            monstro_neutro.undraw()
-            monstro_ataque.draw(win)                                        #monstro ataca
-            personagem_batalha.undraw()
-            personagem_sofrendo.draw(win)                                   #personagem recebe dano
-            time.sleep(0.9)                                                 #delay para animação de dano do monstro
-            monstro_ataque.undraw()
-            monstro_neutro.draw(win)
-            personagem_sofrendo.undraw()
-            personagem_batalha.draw(win)
-            time.sleep(0.2)                                         
-            player["vida_atual"]= player["vida_atual"]-inimigo_1["dano"]       #aqui fica a impressão do dano logo após o personagem executar
-            HP_personagem.undraw()                                             #uma ação
-            HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
-            HP_personagem.setFill("White")
-            HP_personagem.setSize(20)
-            HP_personagem.draw(win)                                            #hp do personagem aparece na tela atualizado
+        #CASO A VIDA NÃO CHEGUE A ZERO A BATALHA CONTINUA E O MONSTRO ATACA <-- ??
+        monstro_neutro.draw(win)                                        #monstro volta a ser neutro
+        HP.undraw()                                                     #aqui o hp é atualizado, 
+        HP=Text(Point(905,100),f'{inimigo_1['vida']}')                  #do inimigo
+        HP.setFill("White")
+        HP.setSize(20)
+        HP.draw(win)
+        print(inimigo_1['vida'])                                        #printa na tela
+        time.sleep(0.3) #delay para animação             
+        efeito_dano.undraw()                        
+        personagem_batalha2.undraw()
+        personagem_batalha.draw(win)                                    
+        time.sleep(0.7)                                                 #delay antes do monstro atacar
+        monstro_neutro.undraw()
+        monstro_ataque.draw(win)                                        #monstro ataca
+        personagem_batalha.undraw()
+        personagem_sofrendo.draw(win)                                   #personagem recebe dano
+        time.sleep(0.9)                                                 #delay para animação de dano do monstro
+        monstro_ataque.undraw()
+        monstro_neutro.draw(win)
+        personagem_sofrendo.undraw()
+        personagem_batalha.draw(win)
+        time.sleep(0.2)                                         
+        player["vida_atual"]= player["vida_atual"]-inimigo_1["dano"]       #aqui fica a impressão do dano logo após o personagem executar
+        HP_personagem.undraw()                                             #uma ação
+        HP_personagem=Text(Point(155,100),f"{player['vida_atual']}")
+        HP_personagem.setFill("White")
+        HP_personagem.setSize(20)
+        HP_personagem.draw(win)                                            #hp do personagem aparece na tela atualizado
         if inimigo_1["vida"] <=0 or player["vida_atual"] <= 0:
             break
     #aqui serão 'des'desenhadas as coisas do cenário quando o jogador clicar com o mouse
     win.getMouse()
     background3.undraw()
-    personagem_batalha.undraw()
+    #personagem_batalha.undraw()
     monstro_neutro.undraw() 
     HP.undraw()
     HP_personagem.undraw()
@@ -602,6 +589,9 @@ def fase_jogo4 (win,player,cobra): # batalha cobra
         #botao de atalho de teste para ir para a próxima fase, o jogador não deve apertar
         if tecla=='f':
             return 'fase5'
+        if tecla == 'i':
+            inventario(win,player)
+            continue
         #ataque comum
         if tecla == '1' and player['vida_atual']> 0:                            #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
@@ -920,7 +910,7 @@ def fase_jogo5(win,player,prisco,larissa):
             return 'fase5'
 
     #SEGUE A MESMA LÓGICA DA FASE ANTERIOR, POR ISSO NÃO COLOQUEI TANTAS DESCRIÇÕES    
-    
+
 
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
@@ -940,7 +930,5 @@ def main ():
             telas = fase_jogo4(win,player,cobra)
         elif telas == 'fase5':
            telas = fase_jogo5(win,player,prisco,larissa)
-    
-
 
 main()
