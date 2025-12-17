@@ -28,6 +28,36 @@ listasprite_dir = [
     "imgs/sprite_personagem/sprite5.png",
 ]
 
+    
+player = {
+        "nome": "nome_player",
+        "vida_max": 100,
+        "vida_atual": 100,
+        "dano": 400,
+        "pocao": 2,
+        "dano especial":30,
+    }
+
+inimigo_1 = {"vida": 50, "dano": 5}
+
+monstro_neutro = {
+        "nome": "monstro_neutro",
+        "vida_max": 200,
+        "dano_normal": 10,
+        "dano_especial": 20,
+    }
+prisco = {
+        "dano":20,
+        "vida_max":3000,
+    }
+cobra = {
+        "dano":40,
+        "vida_max":500
+    }
+larissa = {
+        'dano':100,
+        'vida_max':200
+    }
 # VARIAVEIS GLOBAIS !!
 
 inventarior = {"pocao_de_vida": 3, "espada": 1}
@@ -70,15 +100,20 @@ def menu(win):
             return "fase1"
 
 
-def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra armazenar os itens
-    win_inv = GraphWin("Inventário", 400, 450)
-    win_inv.setBackground("grey")
+def inventario(win,player):  
+    
+    elemento_popup = []
+    fundo = Rectangle(Point(50, 50), Point(350, 400))
+    fundo.setFill("grey")
+    fundo.draw(win)
+    elemento_popup.append(fundo)
 
     y = 50
     titulo = Text(Point(200, 20), "Inventário")
     titulo.setSize(18)
     titulo.setStyle("bold")
-    titulo.draw(win_inv)
+    titulo.draw(win)
+    elemento_popup.append(titulo)
     
     botoes_usar = {}
     
@@ -86,8 +121,10 @@ def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra
         if qnt <= 0:
             continue
 
-        if y > 300:
-            Text(Point(200,395), "idk").draw(win_inv)
+        if y > 320:
+            mensagem = Text(Point(200,350),'idk')
+            mensagem.draw(win)
+            elemento_popup.append(mensagem)
             break
 
         info = itens.get(item_id)
@@ -97,52 +134,59 @@ def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra
             descricao = info['desc']
             tipo = info['tipo']
             
-            retangulo = Rectangle(Point(10, y - 15), Point(390, y + 40))
+            retangulo = Rectangle(Point(60, y - 15), Point(340, y + 40))
             retangulo.setFill("white")
             retangulo.setOutline("gray")
-            retangulo.draw(win_inv)
+            retangulo.draw(win)
+            elemento_popup.append(retangulo)
 
-            texto_nome = Text(Point(105, y), f"{nome_completo} (x{qnt})")
+            texto_nome = Text(Point(150, y), f"{nome_completo} (x{qnt})")
             texto_nome.setSize(12)
             texto_nome.setStyle("bold")
-            texto_nome.draw(win_inv)
+            texto_nome.draw(win)
+            elemento_popup.append(texto_nome)
 
-            texto_desc = Text(Point(105, y + 20), descricao)
+            texto_desc = Text(Point(150, y + 20), descricao)
             texto_desc.setSize(10)
-            texto_desc.draw(win_inv)
+            texto_desc.draw(win)
+            elemento_popup.append(texto_desc)
         
         if tipo == "Consumível":
-            botao_x1, botao_y1 = 300, y - 10
-            botao_x2, botao_y2 = 380, y + 10
+            botao_x1, botao_y1 = 280, y - 10
+            botao_x2, botao_y2 = 330, y + 10
                 
             botao_usa = Rectangle(Point(botao_x1, botao_y1), Point(botao_x2, botao_y2))
             botao_usa.setFill("green")
             botao_usa.setOutline("darkgreen")
-            botao_usa.draw(win_inv)
+            botao_usa.draw(win)
+            elemento_popup.append(botao_usa)
     
-            texto_usar = Text(Point(340, y), "Usar")
+            texto_usar = Text(Point(305, y), "Usar")
             texto_usar.setSize(10)
             texto_usar.setStyle("bold")
             texto_usar.setTextColor("white")
-            texto_usar.draw(win_inv)
+            texto_usar.draw(win)
+            elemento_popup.append(texto_usar)
             botoes_usar[item_id] = (botao_x1, botao_y1, botao_x2, botao_y2)
         y += 60
-    botao_x1, botao_y1 = 150, 410
-    botao_x2, botao_y2 = 250, 440
+    botao_x1, botao_y1 = 150, 380
+    botao_x2, botao_y2 = 250, 410
     
     botao_fecha = Rectangle(Point(botao_x1, botao_y1), Point(botao_x2, botao_y2))
     botao_fecha.setFill("red")
     botao_fecha.setOutline("darkred")
-    botao_fecha.draw(win_inv)
+    botao_fecha.draw(win)
+    elemento_popup.append(botao_fecha)
     
-    texto_fechar = Text(Point(200, 425), "fechar")
+    texto_fechar = Text(Point(200, 395), "fechar")
     texto_fechar.setSize(12)
     texto_fechar.setStyle("bold")
     texto_fechar.setTextColor("white")
-    texto_fechar.draw(win_inv)
+    texto_fechar.draw(win)
+    elemento_popup.append(texto_fechar)
 
     while True:
-        p = win_inv.getMouse() 
+        p = win.getMouse() 
         if botao_x1 <= p.getX() <= botao_x2 and botao_y1 <= p.getY() <= botao_y2:
             break
 
@@ -159,12 +203,12 @@ def inventario(win,player):  # funçao apenas da janela, criar outra funçao pra
             if player['vida_atual'] > player['vida_max']:
                 player['vida_atual'] = player['vida_max']
             mensagem = f"usou essa merda de item ai: {itens[item_usado]['nome']} e curou {cura}"
-            Text(Point(200, 395), mensagem).draw(win_inv)
-                
-            win_inv.close()
-            inventario(win,player)
-            return
-    win_inv.close()
+            for item in elemento_popup:
+                item.undraw()
+            return inventario(win, player)
+    
+    for item in elemento_popup:
+        item.undraw()
 
     
 
@@ -246,7 +290,7 @@ def fase_jogo(win,player):
         mx = click.getX()
         my = click.getY()
         if (x1 <= mx <= x2) and (inv_y1 <= my <= inv_y2):
-            inventario(win,player)  # pega a funçao
+            inventario(win, player)  # pega a funçao
             # nao ta chamando.
         elif (x1_dialogo <= mx <= x2_dialogo) and (
             y1 <= my <= y2
@@ -889,33 +933,7 @@ def fase_jogo5(win,player,prisco,larissa):
 def main ():
     win=GraphWin('C3 Dungeon', 1080, 800)
     telas=menu(win)
-    player = {
-        "nome": "nome_player",
-        "vida_max": 100,
-        "vida_atual": 100,
-        "dano": 400,
-        "pocao": 2,
-        "dano especial":30,
-    }
-    inimigo_1 = {"vida": 50, "dano": 5}
-    monstro_neutro = {
-        "nome": "monstro_neutro",
-        "vida_max": 200,
-        "dano_normal": 10,
-        "dano_especial": 20,
-    }
-    prisco = {
-        "dano":20,
-        "vida_max":3000,
-    }
-    cobra = {
-        "dano":40,
-        "vida_max":500
-    }
-    larissa = {
-        'dano':100,
-        'vida_max':200
-    }
+
    
     while True:
 
