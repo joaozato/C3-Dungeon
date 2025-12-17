@@ -33,7 +33,7 @@ player = {
         "nome": "nome_player",
         "vida_max": 100,
         "vida_atual": 100,
-        "dano": 400,
+        "dano": 15,
         "pocao": 2,
         "dano especial":30,
     }
@@ -299,7 +299,7 @@ def fase_jogo(win,player):
     return "fase2"
 
 
-def fase_jogo2(win,player):
+def fase_jogo2(win,player):  #onde o boneco anda pelo mapa
 
     LARGURA_MAX = 1080
     ALTURA_MAX = 800
@@ -380,7 +380,7 @@ def mapa_city(win,player_x,player_y):
 
     #AQUI VOU ADD MESMA LOGICA DA FASE 2, SOQ MUDANDO BACKGROUNDS
 
-def fase_jogo3(win, player, inimigo_1):
+def fase_jogo3(win, player, inimigo_1):  #batalha contra aed
     #CONSTRUÇÃO DO CENÁRIO, SPRITES DOS PERSONAGENS QUE VÃO SER UTILIZADOS NAS VERIFICAÇÕES NO CENÁRIO INICIAL
 
     background3 = Image(Point(540, 400), "imgs/floresta.png")                     #construção da interface e cenário
@@ -399,7 +399,7 @@ def fase_jogo3(win, player, inimigo_1):
 
     caixa_dialogo2=Rectangle(Point(320,650),(Point(740,800)))                     #caixa de dialogo
     caixa_dialogo2.setFill('black')                                               #cor da caixa
-    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!\n Aperte 1 para ataque normal, e 2 para ataque especial \n você só pode usar o especial uma vez por batalha.")
+    texto_batalha=Text(Point(530,725),"Sua primeira batalha começa aqui,\n prepare-se!\n Aperte 1 para ataque normal, e 2 para ataque especial \n.")
     texto_batalha.setFill("white")                                                #cor do texto dentro dela
     HP = Text(Point(905, 100), f"{inimigo_1['vida']}")                            #variavel de hp do inimigo que será utilizada na tela
     HP.setFill("White")                                                           #setando a cor do texto da variavel
