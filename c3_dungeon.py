@@ -3,32 +3,8 @@ import time  # importando time para diminuir a velocidade que as letras aparecem
 import random as rd
 
 # lista sprites
-listasprite_costas = [
-    "imgs/sprite_personagem/sprite1_costas.png",
-    "imgs/sprite_personagem/sprite2_costas.png",
-    "imgs/sprite_personagem/sprite3_costas.png",
-]
-listasprite_frente = [
-    "imgs/sprite_personagem/sprite1_frente.png",
-    "imgs/sprite_personagem/sprite2_frente.png",
-    "imgs/sprite_personagem/sprite3_frente.png",
-]
-listasprite_esq = [
-    "imgs/sprite_personagem/sprite1_esquerda.png",
-    "imgs/sprite_personagem/sprite2_esquerda.png",
-    "imgs/sprite_personagem/sprite3_esquerda.png",
-    "imgs/sprite_personagem/sprite4_esquerda.png",
-    "imgs/sprite_personagem/sprite5_esquerda.png",
-]
-listasprite_dir = [
-    "imgs/sprite_personagem/sprite1.png",
-    "imgs/sprite_personagem/sprite2.png",
-    "imgs/sprite_personagem/sprite3.png",
-    "imgs/sprite_personagem/sprite4.png",
-    "imgs/sprite_personagem/sprite5.png",
-]
+# VARIAVEIS GLOBAIS !!
 
-    
 player = {
         "nome": "nome_player",
         "vida_max": 100,
@@ -58,7 +34,6 @@ larissa = {
         'dano':100,
         'vida_max':200
     }
-# VARIAVEIS GLOBAIS !!
 
 inventarior = {"pocao_de_vida": 3, "espada": 1}
 
@@ -71,6 +46,31 @@ itens = {
     },
     "espada": {"nome": "Espada", "tipo": "Arma", "dano": "15", "desc": "É uma espada =D !"},
 }
+
+listasprite_costas = [
+    "imgs/sprite_personagem/sprite1_costas.png",
+    "imgs/sprite_personagem/sprite2_costas.png",
+    "imgs/sprite_personagem/sprite3_costas.png",
+]
+listasprite_frente = [
+    "imgs/sprite_personagem/sprite1_frente.png",
+    "imgs/sprite_personagem/sprite2_frente.png",
+    "imgs/sprite_personagem/sprite3_frente.png",
+]
+listasprite_esq = [
+    "imgs/sprite_personagem/sprite1_esquerda.png",
+    "imgs/sprite_personagem/sprite2_esquerda.png",
+    "imgs/sprite_personagem/sprite3_esquerda.png",
+    "imgs/sprite_personagem/sprite4_esquerda.png",
+    "imgs/sprite_personagem/sprite5_esquerda.png",
+]
+listasprite_dir = [
+    "imgs/sprite_personagem/sprite1.png",
+    "imgs/sprite_personagem/sprite2.png",
+    "imgs/sprite_personagem/sprite3.png",
+    "imgs/sprite_personagem/sprite4.png",
+    "imgs/sprite_personagem/sprite5.png",
+]
 
 
 def menu(win):
@@ -246,9 +246,7 @@ def fase_jogo(win):
     inventario_button.setFill("orange")
     inventario_button.draw(win)
     centrox_inv = (x1 + x2) / 2  # msm coisa
-    centroy_inv = (
-        inv_y1 + inv_y2
-    ) / 2  # USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
+    centroy_inv = (inv_y1 + inv_y2) / 2  # USAR ESTES CALCULOS PRA PEGAR O CENTRO DOS TEXTOS OK!
     inventario_texto = Text(Point(centrox_inv, centroy_inv), "Inventário")
     inventario_texto.setSize(20)
     inventario_texto.draw(win)
@@ -332,15 +330,7 @@ def fase_jogo2(win):
             if tecla != ultima_tecla:
                 cont = 0
                 ultima_tecla = tecla
-            if tecla == "w":
-                player_y = player_y - 5
-                lista = listasprite_costas
-                # sprite_novo = listasprite_costas[cont]
-            elif tecla == "s":
-                player_y = player_y + 5
-                lista = listasprite_frente
-                # sprite_novo = listasprite_frente[cont]
-            elif tecla == "a":
+            if tecla == "a":
                 player_x = player_x - 5
                 lista = listasprite_esq
             elif tecla == "d":
@@ -363,14 +353,14 @@ def fase_jogo2(win):
             sprite_atual.undraw()
             #novo_x = LARGURA_MAX - 50
             #novo_y = player_y
-            return "mapa_city"
+            return "fase3"
         
         elif player_x > LARGURA_MAX:
             background_c3.undraw()
             sprite_atual.undraw()
             #novo_x = 50 
             #novo_y = player_y
-            return ("mapa_outra_floresta", 50, player_y)
+            return "fase4"
 
 #AQUI É AS FUNÇOES DOS MAPAS! 
 
@@ -427,6 +417,9 @@ def fase_jogo3(win, player, inimigo_1):
     caixa_dialogo2.draw(win)
     texto_batalha.draw(win)
     personagem_batalha.draw(win)  
+
+
+    
     
     # INICIALIZAÇÃO DO COMBATE                                                  #spawn do personagem
     win.getMouse()                                                                  #aguarda o click do mouse
@@ -440,7 +433,9 @@ def fase_jogo3(win, player, inimigo_1):
         #condição se o jogador utiliza a primeira skill de luta
         if tecla=='f':
             return 'fase4'
-        if tecla == '1' and turno_player== True:                                #jogador ataca
+        elif tecla == 'i':
+            inventario(win,player)
+        elif tecla == '1' and turno_player== True:                                #jogador ataca
             ataque_icon_ativo.draw(win)                                         #espada em cima da interface pisca sinalizando que está ativa
             time.sleep(0.9)                                                     #delay até ela desaparecer
             ataque_icon_ativo.undraw()                                          #ela desaparece
@@ -453,7 +448,7 @@ def fase_jogo3(win, player, inimigo_1):
             monstro_sofrendo.undraw()                                               #sprite do monstro desaparece
             inimigo_1['vida'] = inimigo_1['vida'] - player['dano']                          #recebe a variavel de dano
         #condição se o jogador aperta o super poder
-        if tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
+        elif tecla == '2' and turno_player == True:   # falta deixar a permissão pra só um ataque especial, se colocar o jogo buga por redesenhar uma imagem, já que essa verificação é pulada, ele ignora e vai direto pro else.p
             monstro_neutro.undraw()
             personagem_batalha.undraw()                                         #código para o super especial
             power_icon_ativado.draw(win)
@@ -472,7 +467,7 @@ def fase_jogo3(win, player, inimigo_1):
             especial_count -=1
         #condição se o inimigo morre
 
-        if inimigo_1["vida"] <= 0:
+        elif inimigo_1["vida"] <= 0:
             coracao_inimigo_vivo.undraw()
             coracao_inimigo_morto.draw(win)
             HP.undraw()                                                        #aqui o hp é atualizado, 
@@ -600,6 +595,7 @@ def fase_jogo4 (win,player,cobra):
     ataque_icon.draw(win)
     power_icon.draw(win)
 
+
     # define o que vai sumir antes de começar a batalha.
     win.getMouse()           
     prisco_face.undraw()
@@ -722,7 +718,7 @@ def fase_jogo4 (win,player,cobra):
             player['vida_atual']=100
             cobra['vida_max']=500
             return 'fase4'
-    
+        
 def fase_jogo5(win,player,prisco,larissa):
     #declaração de variaveis de cenário e sprites
     background_final=Image(Point(540,400),'imgs/batalha_final.png')
