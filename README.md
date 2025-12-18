@@ -8,10 +8,10 @@ O jogo é um rpg de turno, baseado em jogos antigos como final fantasy e pokemon
 
 Consiste em ataque e defesa, um turno do jogador e outro do inimigo.
 
-Sistema de inventários, podendo utilizar item de vida, armas que dão diferentes danos.
+Sistema de inventários, podendo utilizar item de vida.
 
-Personagem tem um total de 100 pontos de vida, o ataque basico é 10 de dano com a espada.
+Personagem tem um total de 100 pontos de vida, o ataque basico é 20 de dano com a espada, e com especial é 35.
 
-Os chefes terão em torno de 300 de vida.
+Os chefes tem vidas alternadas de acordo com sua ordem, primeiro, segundo ou terceiro, sendo 50, 200, e 300.
 
 O jogo utiliza pixel art (feita com IA) como plano de fundo, enquanto para o personagem utiliza desenhos digitais.
